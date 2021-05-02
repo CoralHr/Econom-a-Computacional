@@ -93,9 +93,6 @@ tau3<-tau_min(universo$total_purchases,N=nrow(universo),share_control = seq(0,1,
 
 ### 5 (2ptos) Realiza la asignación aleatoria. Muestra la distribución de los grupos por estrato, los misfits. Sin mirar el balance, lograron una asignación aleatoria exitosa? Justifica tu respuesta 
 ```{r }
-universo$poblacion<-as.factor(universo$population)
-View(universo)
-summary(universo)
 attach(universo)
 
 #Generamos grupos de tratamiento y control a través de una asignación aleatoria estratificada por género y edad. 
