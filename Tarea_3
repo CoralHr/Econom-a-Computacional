@@ -81,8 +81,7 @@ View(universo)
 
 ### 3. Repite el mismo ejercicio pero ahora para usando las compras totales como variable objetivo. Elige un share de control con base en tu respuesta de esta y la anterior pregunta
 
-
-
+tau<-tau_min(universo$total_purchases,N=nrow(universo),share_control = seq(0,1,0.05),n_groups=8)
 
 ### 4 (2ptos) Qué variables crees que puedan estar más correlacionadas con el impacto? Justifica tu respuesta y elige un set
 
