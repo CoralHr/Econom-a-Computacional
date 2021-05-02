@@ -65,13 +65,10 @@ View(universo)
 
 - Treat 3: Sólo cupón de $200
 
-- Treat 4: Sólo cupón de $300
+- Treat 4:Mensaje + $100
 
-- Treat 5: Mensaje + $100
+- Treat 5: Mensaje + $200
 
-- Treat 6: Mensaje + $200
-
-- Treat 7: Mensaje + $300
 
 
 ### 2 (2pts). Como pueden notar, tenemos 2 poblaciones: Usuarios inactivos y usuarios que nunca estuvieron activos. Para ellos, las tasas de transaccionalidad son hasta ahora 7.94% y 0%. Utiliza esta información para hacer pruebas de poder: Dada esta tasa y población, cuál es el efecto mínimo detectable sobre la tasa de transaccionalidad como función de cuantas observaciones asignamos al grupo control? Interpreta. (Tip: asegurate de dejar claros los grupos comparados en esta prueba)
