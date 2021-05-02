@@ -92,6 +92,37 @@ tau3<-tau_min(universo$total_purchases,N=nrow(universo),share_control = seq(0,1,
 
 
 ### 5 (2ptos) Realiza la asignación aleatoria. Muestra la distribución de los grupos por estrato, los misfits. Sin mirar el balance, lograron una asignación aleatoria exitosa? Justifica tu respuesta 
+```{r }
+universo$poblacion<-as.factor(universo$population)
+View(universo)
+summary(universo)
+attach(universo)
+
+#Generamos grupos de tratamiento y control a través de una asignación aleatoria estratificada por género y edad. 
+
+#volvemos age en cuartiles
+
+quantile(age, prob=c(0,1/4,2/4,3/4,1))
+universo$age_cuart<-cut(age,
+                      breaks=c(18,20,26,34,84), 
+                      labels=c("Q1","Q2","Q3","Q4"))
+#Volvemos age en percentiles
+quantile(age, prob=seq(0, 1, length = 11))
+
+universo$age_dec<-cut(age,
+                      breaks =c(18,19,20,21,23,26,28,32,37,45,84), 
+                      labels= c("Q1","Q2","Q3","Q4",
+                          "Q5","Q6","Q7","Q8","Q9","Q10"))
+
+#####propongo estratificar por edades(cuartiles) y género######
+
+assigment<-treatment_assign(data = universo, share_control = 0.1, n_t = 7,
+                            strata_varlist = dplyr::vars(age_cuart, 
+                            gender_F), missfits = "strata", 
+                            seed = 1990, key = "user_id")
+table(universo$treat, useNA = "ifany")
+prop.table(table(universo$treat, useNA = "ifany"))
+```
 
 
 ### 6. Qué elección tomaron sobre como manejar los misfits? Elaboren sus razones
