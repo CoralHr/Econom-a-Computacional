@@ -77,11 +77,16 @@ View(universo)
 
 ### 2 (2pts). Como pueden notar, tenemos 2 poblaciones: Usuarios inactivos y usuarios que nunca estuvieron activos. Para ellos, las tasas de transaccionalidad son hasta ahora 7.94% y 0%. Utiliza esta información para hacer pruebas de poder: Dada esta tasa y población, cuál es el efecto mínimo detectable sobre la tasa de transaccionalidad como función de cuantas observaciones asignamos al grupo control? Interpreta. (Tip: asegurate de dejar claros los grupos comparados en esta prueba)
 
-
+# Convertimos la variable population a factor para conocer el tamaño de cada grupo (Inactive, Never Active)
+universo$population<-factor(universo$population)
+summary(universo$population)
+# Se obtienen 14084 individuos inactive y 90107 inactive, con lo cual se puede estimar la tasa de transaccionalidad, a partir de las tasas que conocemos para cada grupo (7.94 y 0)
+p_y<-0.0794*(14084/194191)+0*(90107/194191)
+tau2<-tau_min_probability(p_y,N=nrow(universo),share_control = seq(0,1,0.05),n_groups=8)
 
 ### 3. Repite el mismo ejercicio pero ahora para usando las compras totales como variable objetivo. Elige un share de control con base en tu respuesta de esta y la anterior pregunta
 
-tau<-tau_min(universo$total_purchases,N=nrow(universo),share_control = seq(0,1,0.05),n_groups=8)
+tau3<-tau_min(universo$total_purchases,N=nrow(universo),share_control = seq(0,1,0.05),n_groups=8)
 
 ### 4 (2ptos) Qué variables crees que puedan estar más correlacionadas con el impacto? Justifica tu respuesta y elige un set
 
