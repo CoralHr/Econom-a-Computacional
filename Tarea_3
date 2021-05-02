@@ -90,6 +90,8 @@ stargazer(tau2,type="latex",summary=FALSE,font.size="tiny")
 (tau3<-tau_min(universo$total_purchases,N=nrow(universo),share_control = seq(0,1,0.05),n_groups=8))
 stargazer(tau3,type="latex",summary=FALSE, font.size="tiny")
 
+# Con base en la respuesta a las preguntas 2 y 3, se observa que el efecto mínimo detectable para cada tratamiento se minimiza con un share de control entre 0.25 y 0.3. Se elige 0.3, que tiene un menor efecto mínimo detectable global.
+
 ### 4 (2ptos) Qué variables crees que puedan estar más correlacionadas con el impacto? Justifica tu respuesta y elige un set
 
 
