@@ -25,15 +25,15 @@ library(RCT)
 
 ## Contexto
 
-Rappi te contrata para hacer una intervención que active a sus usuarios en la plataforma. La empresa quiere evaluar si es necesario darles cash los usuarios (y cuánto) para reactivar a los usuarios o si es suficiente con una campaña informativa. 
+Rappi te contrata para hacer una intervención que active a sus usuarios en la plataforma. La empresa quiere evaluar si es necesario darles cash a los usuarios (y cuánto) para reactivar a los usuarios o si es suficiente con una campaña informativa. 
 
-Para ello, te decides a realizar un experimento factorial donde evaluas: 
+Para ello, te decides a realizar un experimento factorial donde evalúas: 
 
 - El impacto de mandar un mensaje informativo donde muestres las nuevas tiendas afiliadas a Rappi, y 
 
-- El impacto de dar 100 ó 200 pesos en cupones
+- El impacto de dar 100, 200 o 300 pesos en cupones
 
-Finalmente, les gustaría entender cómo interactuar el mostras las nuevas tiendas aunado con dar dinero en cupones. 
+Finalmente, les gustaría entender cómo interactuar el mostrar las nuevas tiendas aunado con dar dinero en cupones. 
 
 A la empresa le gustaría entender el impacto de la intervención sobre: 
 
@@ -45,7 +45,7 @@ A la empresa le gustaría entender el impacto de la intervención sobre:
 
 ## Datos
 
-Los dotos para asignar los pueden encontrar en `universo.Rdata`. 
+Los datos para asignar los pueden encontrar en `universo.Rdata`. 
 
 Cargemos los datos
 ```{r }
@@ -61,17 +61,17 @@ View(universo)
 
 - Trat 1: Sólo mensaje
 
-- Treat 2: Sólo cupón $100
+- Treat 2: Sólo cupón de $100
 
 - Treat 3: Sólo cupón de $200
 
 - Treat 4: Sólo cupón de $300
 
-- Treat 5: Mensaje + $100
+- Treat 5: Mensaje + cupón de $100
 
-- Treat 6: Mensaje + $200
+- Treat 6: Mensaje + cupón de $200
 
-- Treat 7: Mensaje + $300
+- Treat 7: Mensaje + cupón de $300
 
 
 
