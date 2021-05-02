@@ -83,10 +83,12 @@ summary(universo$population)
 # Se obtienen 14084 individuos inactive y 90107 inactive, con lo cual se puede estimar la tasa de transaccionalidad, a partir de las tasas que conocemos para cada grupo (7.94 y 0)
 p_y<-0.0794*(14084/194191)+0*(90107/194191)
 (tau2<-tau_min_probability(p_y,N=nrow(universo),share_control = seq(0,1,0.05),n_groups=8))
+stargazer(tau2,type="latex",summary=FALSE,font.size="tiny")
 
 ### 3. Repite el mismo ejercicio pero ahora para usando las compras totales como variable objetivo. Elige un share de control con base en tu respuesta de esta y la anterior pregunta
 
 (tau3<-tau_min(universo$total_purchases,N=nrow(universo),share_control = seq(0,1,0.05),n_groups=8))
+stargazer(tau3,type="latex",summary=FALSE, font.size="tiny")
 
 ### 4 (2ptos) Qué variables crees que puedan estar más correlacionadas con el impacto? Justifica tu respuesta y elige un set
 
