@@ -148,6 +148,13 @@ En general parece haber balance, pues con un 5% de significancia, solo hay 5 de 
  
 ### 8. Repite el ejercicio pero ahora con pruebas de balance conjuntas. Muestra los resultados (incluyendo el estadístico de prueba, grados de libertad y p values) Interpreta
 
+```{r, results='asis', echo=FALSE, warning=FALSE, message=FALSE}
+
+balance_r<-balance_regression(universo_dum,"treat")
+efe<-balance_r$F_test
+stargazer(as.data.frame(efe),type="latex",summary=FALSE, font.size = "small")
+
+```
 
 ### 9. Elabora porqué parecen cumplirse los 3 supuestos de la asignación
 
