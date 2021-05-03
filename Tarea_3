@@ -130,6 +130,14 @@ table(universo$treat, useNA = "ifany")
 prop.table(table(universo$treat, useNA = "ifany"))
 ```
 
+```{r, results='asis', echo=FALSE}
+universo$agelabel<-ntile_label(universo$age,n=4)
+
+treatment_assign(data = universo, share_control = 0.3, n_t = 7, strata_varlist =dplyr::vars(agelabel, gender_F, population), missfits="strata", seed = 1990, key = "user_id")
+table(universo$treat, useNA = "ifany")
+prop.table(table(universo$treat, useNA = "ifany"))
+
+```
 
 ### 6. Qué elección tomaron sobre como manejar los misfits? Elaboren sus razones
 
