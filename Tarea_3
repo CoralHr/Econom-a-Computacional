@@ -141,7 +141,7 @@ universo_dum<-universo_dum[,-14]
 universo_dum<-universo_dum[!is.na(universo_dum$treat),]
 
 tabla_b<-balance_table(universo_dum,"treat")
-stargazer(as.data.frame(tabla_b),type="latex",summary=FALSE, keep=c(11:17))
+stargazer(as.data.frame(tabla_b),type="latex",summary=FALSE, keep=c(2,11:17))
                             
 ```
 
