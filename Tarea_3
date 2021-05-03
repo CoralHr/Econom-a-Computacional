@@ -115,7 +115,7 @@ tabla<-as.data.frame(assignment$summary_strata)
 stargazer(tabla,type="latex",summary=FALSE)
 
 ```
-Sin mirar el balance no podemos saber si se trató de una asiganción aleatoria exitosa, pero al menos sabemos que hay balance en términos de las variables por las que estratificamos.
+Sin mirar el balance no podemos saber si se trató de una asignación aleatoria exitosa, pero al menos sabemos que hay balance en términos de las variables por las que estratificamos.
 ### 6. Qué elección tomaron sobre como manejar los misfits? Elaboren sus razones
 Como solo se encontraron 91 missfits, que representan el 0.08% de las observaciones, se optó por eliminarlos del experimento. 
 
