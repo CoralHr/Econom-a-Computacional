@@ -206,10 +206,10 @@ prop.table(table(datos$treat, useNA = "ifany"))
 
 
 ```
-Podemos verificar que se cumplen los tres supuestos: 
-SUTVA: Ya que estamos asignando a cada uno de los individuos tratimientos con mensajes a sus dispositivos privados (sin niguna publicidad aparte), estamos evitando que algún miembro de cada grupo asignado sepa la información que se le dio al otro, por lo que se cumple este supuesto.  
-Overlap: Podemos observar en la tabla que, las probabilidades de cada individuo de pertenecer a algún grupo de tratamiento esta entre 0 y 1, (sin incluirlos). Así porbamos este supuesto.
-Unconfoundness: Como se demostró en la tabla de balance conjunta podemos confirmar este supuesto ya que, al estar balanceada,sugiere que no existe ninguna relación entre la asignación de tratamiento y las características observablesy no observables de los individuos.
+Parece que se cumplen los tres supuestos, ya que: 
+SUTVA: Estamos asignando tratamientos a nivel individual (mensajes a sus dispositivos privados y dinero que pueden utilizar en su cuenta); no se está considerando realizar algún otro esfuerzo de publicidad, por ejemplo, en medios masivos, lo que evita que el grupo de control se entere de la información que se les dio a los individuos tratados o que los grupos de control se enteren del dinero que se les ofreció a otros grupos (lo que podría hacerles cambiar su comportamiento). Por lo tanto, no parece hacer fuentes de contaminación que impidan que se cumpla este supuesto.  
+Overlap: Podemos observar que las probabilidades de cada individuo de pertenecer a algún grupo de tratamiento están entre 0 y 1 (sin incluirlos). 
+Unconfoundness: Las pruebas de balance anteriores, en particular, la prueba de balance conjunta, dan evidencia de que los grupos se encuentran balanceados, por lo que parece que la aleatorización funcionó y que no existe relación entre la asignación de tratamiento y las características (observables) de los individuos.
 
 ### 10. Elabora un pitch de negocio sobre los beneficios que este experimento podría dejar a Rappi. 
 
