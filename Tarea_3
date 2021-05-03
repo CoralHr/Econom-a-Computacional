@@ -121,7 +121,36 @@ Como solo se encontraron 91 missfits, que representan el 0.08% de las observacio
 
 
 ### 7. Realiza las pruebas de balance t sobre todas las variables (Tip: transforma las categóricas en dummys). Parece haber balance?  
+```{r}
+#Transformar variables categoricas a dummys
+universo <- universo %>% mutate(universo, inactive=ifelse(population=="Inactive",1,0),
+                                never_active=ifelse(population=="Never Active",1,0))
 
+universo <- universo %>% mutate(universo, age_cuart_1=ifelse(age_cuart=="Q1",1,0),
+                                age_cuart_2=ifelse(age_cuart=="Q2",1,0),
+                                age_cuart_3=ifelse(age_cuart=="Q3",1,0),
+                                age_cuart_4=ifelse(age_cuart=="Q4",1,0)
+                                )
+
+universo <- universo %>% mutate(universo, age_dec_1=ifelse(age_dec=="Q1",1,0),
+                                age_dec_2=ifelse(age_dec=="Q2",1,0),
+                                age_dec_3=ifelse(age_dec=="Q3",1,0),
+                                age_dec_4=ifelse(age_dec=="Q4",1,0),
+                                age_dec_5=ifelse(age_dec=="Q5",1,0),
+                                age_dec_6=ifelse(age_dec=="Q6",1,0),
+                                age_dec_7=ifelse(age_dec=="Q7",1,0),
+                                age_dec_8=ifelse(age_dec=="Q8",1,0),
+                                age_dec_9=ifelse(age_dec=="Q9",1,0),
+                                age_dec_10=ifelse(age_dec=="Q10",1,0)
+                                )
+
+universo <- universo %>% mutate(universo, age_label_1=ifelse(agelabel=="[18 a 20]",1,0),
+                                age_label_2=ifelse(agelabel=="[20 a 26]",1,0),
+                                age_label_3=ifelse(agelabel=="[26 a 34]",1,0),
+                                age_label_4=ifelse(agelabel=="[34 a 84]",1,0)
+                                )
+                                
+          ```
 
 ### 8. Repite el ejercicio pero ahora con pruebas de balance conjuntas. Muestra los resultados (incluyendo el estadístico de prueba, grados de libertad y p values) Interpreta
 
