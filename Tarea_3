@@ -295,7 +295,7 @@ ggplot2::ggplot(data=eval15_df,aes(x=nombre, y=estimate, fill=rownames(eval15_df
 
 ```{r, results='asis', echo=FALSE}
 
-#para el total de compras:
+#para gasto total:
 eval16<-impact_eval(data=universo_f,endogenous_vars="total_purchases_after",treatment="treat",heterogenous_vars="population")
 eval16total_pur<-eval16$total_purchases_after_population
 eval16total_pur$nombre<-c("Control","Trat1","Trat2","Trat3","Trat4","Trat5","Trat6","Control","Trat1","Trat2","Trat3","Trat4","Trat5","Trat6")
@@ -306,10 +306,30 @@ ggplot2::ggplot(data=eval16_df,aes(x=nombre, y=estimate, fill=rownames(eval16_df
 
 ```
 
-# Efectos heterogéneos para gasto total
+
 
 ### 16 (2ptos). Repite el ejercicio para ``phone_verified`. 
 
+```{r, results='asis', echo=FALSE}
+# Efectos heterogéneos para transaccionalidad
 
+eval17<-impact_eval(data=universo_f,endogenous_vars="transacted",treatment="treat",heterogenous_vars="phone_verified")
+eval17transpop<-eval17$transacted_phone_verified
+eval17transpop$nombre<-c("Control","Trat1","Trat2","Trat3","Trat4","Trat5","Trat6","Control","Trat1","Trat2","Trat3","Trat4","Trat5","Trat6")
+eval17_df<-as.data.frame(eval17transpop)
+
+ggplot2::ggplot(data=eval17_df,aes(x=nombre, y=estimate, fill=rownames(eval15_df)))+geom_bar(stat="identity")+guides(fill=FALSE)+labs(x="Tratamientos", y="transacting rate")+geom_text(aes(label=round(estimate,digits=2)))+facet_wrap(~phone_verified)
+
+
+#Para gasto total 
+eval18<-impact_eval(data=universo_f,endogenous_vars="total_purchases_after",treatment="treat",heterogenous_vars="phone_verified")
+eval18total_pur<-eval18$total_purchases_after_phone_verified
+eval18total_pur$nombre<-c("Control","Trat1","Trat2","Trat3","Trat4","Trat5","Trat6","Control","Trat1","Trat2","Trat3","Trat4","Trat5","Trat6")
+eval18_df<-as.data.frame(eval18total_pur)
+
+ggplot2::ggplot(data=eval18_df,aes(x=nombre, y=estimate, fill=rownames(eval15_df)))+geom_bar(stat="identity")+guides(fill=FALSE)+labs(x="Tratamientos", y="transacting rate")+geom_text(aes(label=round(estimate,digits=2)))+facet_wrap(~phone_verified)
+
+
+```
 
 ### 17. Presenta una propuesta de focalización con base en tus resultados generales y heterogeneos. 
