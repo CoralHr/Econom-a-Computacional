@@ -195,23 +195,14 @@ load("d:/Users/marisol.nava/Desktop/Maestría/Eco_computacional/Tarea_3/base_eva
 ```
 
 ### 10 (2ptos). Muestra el estimador ITT para la tasa de transaccionalidad. Recuerda que tu cliente es un grupo empresarial. Por ende, muestra una gráfica donde se aprecie la diferencia entre los grupos de tratamiento y las significancias de manera sencilla. Interpreta tus resultados 
-```{r }
-p10 <- lm(transacted~treat2, data = universo_f)
-stargazer(p10,type = "text")
 
-Tb1 <- universo_f %>%
-  group_by(treat2) %>%
-  summarize(transaccionalidad=mean(transacted))
-Tb1$ITT <- Tb1$transaccionalidad-0.01
+```{r, results='asis', echo=FALSE}
 
-kbl(Tb1, booktabs = T, caption = "<center><strong>Transaccionalidad promedio por tratamiento</strong></center>",
-    digits = c(2,2,2,2,2)) %>%
-  kable_classic_2(full_width = F, html_font = "Cambria", fixed_thead = T)
+eval10<-impact_eval(data=universo_f,endogenous_vars="transacted",treatment="treat")
+eval10$nombre<-c("Control","Trat1","Trat2","Trat3","Trat4","Trat5","Trat6")
 
+ggplot2::ggplot(data=eval10,aes(x=nombre, y=transacted.estimate, label=transacted.estimate,fill=rownames(eval10)))+geom_bar(stat="identity")+guides(fill=FALSE)+labs(x="Tratamientos", y="transacting rate")+geom_text(aes(label=scales::percent(transacted.estimate)))
 
-ggplot2::ggplot(data=Tb1,aes(x=treat2, y=transaccionalidad))+
-  geom_bar(stat="identity")
-  
 ```
 El ITT mostrado en la tabla es el incremento en como mínimo abrir la app en comparación a aquellos usuarios que no recibieron algún incentivo (Control). Por ejemplo aquellos usuarios que recibieron el incentivo "BTC 100" como mínimo abrieron la app en un 4% más que aquellos usuarios control. Todas estas estimaciones son significativas a un 99%.
 
