@@ -108,11 +108,35 @@ En particular, las personas de distinta edad podrían reaccionar distinto al hec
 También hombres y mujeres podrían reaccionar diferente a recibir el mensaje pues podría ser que alguno de ellos, por ejemplo, las mujeres, se encarguen más frecuentemente de realizar las compras, por lo que están más familiarizadas con las tiendas disponibles en la app y reaccionen mejor ante el conocimiento de nuevas tiendas que se agregan.  
 Por otra parte, el tipo de población de que se trate (never active o unactive) también puede estar muy relacionado con el impacto, pues se esperaría que haya un mayor impacto para aquellos que han estado activos alguna vez vs los que nunca han estado activos, quienes tendrían una "barrera" de uso mayor.
 
+```{r }
+
+#Volvemos las variables categoricas a numéricas para poder correr el colerrograma 
+datos_num<-universo%>%select(-user_id)
+
+datos_num$population<-as.factor(datos_num$population)
+datos_num$population<-ifelse(datos_num$population=="Inactive",1,0)
+
+
+datos_num$device_value_d <-ifelse(datos_num$device_value== "[$0-$10,000]" , 1,
+                  ifelse(datos_num$device_value== "[$10,001+]", 2, 
+                  ifelse(datos_num$device_value== "No info", 3,0)))
+
+# Transformo mis variables a numéricas para el correlograma
+library(corrplot)
+
+a<-cor(datos_num  %>% select(-device_value))
+
+corrplot(a, method="number")
+
+
+```
 
 
 ###PROPONGO
 Añadir la varible de de verificación de teléfono ya que los usuarios que verifican su teléfono pueden tener una relación muy marcada con el impacto, 
 porque pueden tener más interés en realizar compras que aquellos que no lo verifican.
+
+También se puede notar en el correlograma que las variables más relacionadas con el total de compras son: edad, 
 
 ### 5 (2ptos) Realiza la asignación aleatoria. Muestra la distribución de los grupos por estrato, los misfits. Sin mirar el balance, lograron una asignación aleatoria exitosa? Justifica tu respuesta 
 ```{r }
