@@ -76,7 +76,7 @@ View(universo)
 
 
 ### 2 (2pts). Como pueden notar, tenemos 2 poblaciones: Usuarios inactivos y usuarios que nunca estuvieron activos. Para ellos, las tasas de transaccionalidad son hasta ahora 7.94% y 0%. Utiliza esta información para hacer pruebas de poder: Dada esta tasa y población, cuál es el efecto mínimo detectable sobre la tasa de transaccionalidad como función de cuantas observaciones asignamos al grupo control? Interpreta. (Tip: asegurate de dejar claros los grupos comparados en esta prueba)
-
+```{r, results='asis', echo=FALSE}
 # Convertimos la variable population a factor para conocer el tamaño de cada grupo (Inactive, Never Active)
 universo$population<-factor(universo$population)
 summary(universo$population)
@@ -84,12 +84,13 @@ summary(universo$population)
 p_y<-0.0794*(14084/194191)+0*(90107/194191)
 (tau2<-tau_min_probability(p_y,N=nrow(universo),share_control = seq(0,1,0.05),n_groups=8))
 stargazer(tau2,type="latex",summary=FALSE,font.size="tiny")
-
+```
 ### 3. Repite el mismo ejercicio pero ahora para usando las compras totales como variable objetivo. Elige un share de control con base en tu respuesta de esta y la anterior pregunta
 
+```{r, results='asis', echo=FALSE}
 (tau3<-tau_min(universo$total_purchases,N=nrow(universo),share_control = seq(0,1,0.05),n_groups=8))
 stargazer(tau3,type="latex",summary=FALSE, font.size="tiny")
-
+```
 # Con base en la respuesta a las preguntas 2 y 3, se observa que el efecto mínimo detectable para cada tratamiento se minimiza con un share de control entre 0.25 y 0.3. Se elige 0.3, que tiene un menor efecto mínimo detectable global.
 
 ### 4 (2ptos) Qué variables crees que puedan estar más correlacionadas con el impacto? Justifica tu respuesta y elige un set
@@ -103,9 +104,9 @@ Por otra parte, el tipo de población de que se trate (never active o unactive) 
 ```{r }
 attach(universo)
 
-#Generamos grupos de tratamiento y control a través de una asignación aleatoria estratificada por género y edad. 
+#Generamos grupos de tratamiento y control a través de una asignación aleatoria estratificada por género, edad y tipo de población. 
 
-#volvemos age en cuartiles
+# Convertimos age en cuartiles
 
 quantile(age, prob=c(0,1/4,2/4,3/4,1))
 universo$age_cuart<-cut(age,
@@ -119,7 +120,6 @@ universo$age_dec<-cut(age,
                       labels= c("Q1","Q2","Q3","Q4",
                           "Q5","Q6","Q7","Q8","Q9","Q10"))
 
-#####propongo estratificar por edades(cuartiles) y género######
 ###FALTA definir la asigación al grupo de control##
 
 assigment<-treatment_assign(data = universo, share_control = 0.1, n_t = 7,
