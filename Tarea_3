@@ -225,24 +225,16 @@ Esto sucedió debido a la variación tan grande que existe entre los distintos g
 
 
 ### 13 (2ptos). Repite la medición en 11 pero ahora con `log(total_purchases_after+1)`. Que encuentras ahora? Interpreta las diferencias
-```{r }
-universo_f$logtpa <- log(universo_f$total_purchases+1)
-p13 <- lm(logtpa~treat2, data = universo_f)
-stargazer(p13,type = "text")
 
-Tb3 <- universo_f %>%
-  group_by(treat2) %>%
-  summarize(ComprasT.=mean(logtpa))
-Tb3$ITT <- Tb3$ComprasT.-0.53
+```{r, results='asis', echo=FALSE}
+universo_f$logtotal_p<-log(universo_f$total_purchases_after+1)
 
+eval13<-impact_eval(data=universo_f,endogenous_vars="logtotal_p",treatment="treat")
+eval13<-as.data.frame(eval13)
+eval13$nombre<-c("Control","Trat1","Trat2","Trat3","Trat4","Trat5","Trat6")
 
-kbl(Tb3, booktabs = T, caption = "<center><strong>Logaritmo de las Compras Totales promedio por tratamiento</strong></center>",
-    digits = c(2,2,2,2,2)) %>%
-  kable_classic_2(full_width = F, html_font = "Cambria", fixed_thead = T)
+ggplot2::ggplot(data=eval13,aes(x=nombre, y=logtotal_p.estimate, fill=rownames(eval13)))+geom_bar(stat="identity")+guides(fill=FALSE)+labs(x="Tratamientos", y="log gasto total")+geom_text(aes(label=round(logtotal_p.estimate,digits=2)))
 
-
-ggplot2::ggplot(data=Tb3,aes(x=treat2, y=ComprasT.))+
-  geom_bar(stat="identity")
 ```
 En esta tercera estimación se ocuparon los logaritmos del gasto total post-tratamiento con la finalidad de reducir la sensibilidad de las estimaciones a las observaciones extremas o atípicas, de tal forma que a diferencia del resultado anterior ahora todas las estimaciones son estadísticamente significativas a un 99%
 
