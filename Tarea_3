@@ -155,8 +155,8 @@ efe<-balance_r$F_test
 stargazer(as.data.frame(efe),type="latex",summary=FALSE, font.size = "small")
 
 ```
-
-### 9. Elabora porqué parecen cumplirse los 3 supuestos de la asignación
+Todos los valores p son suficientemente grandes, por lo que en ninguno de los grupos se rechaza la hipótesis de que las covariables no explican la Pr de pertenecer al tratamiento, lo cual nos da evidencia de que la asignación es aleatoria.
+### 9. Elabora por qué parecen cumplirse los 3 supuestos de la asignación
 
 
 ### 10. Elabora un pitch de negocio sobre los beneficios que este experimento podría dejar a Rappi. 
