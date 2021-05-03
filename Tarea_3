@@ -282,7 +282,18 @@ En esta tercera estimación se ocuparon los logaritmos del gasto total post-trat
 
 
 ### 15 (2ptos). Realiza la estimación de efectos heterogeneos para ambas variables usando `population`. Que encuentras? existe alguna subpoblación para la que los efectos difieran del promedio? Para cada efecto, muestra gráficas como lo hiciste en los ITTs
+```{r, results='asis', echo=FALSE}
 
+# Efectos heterogéneos para transaccionalidad
+
+eval15<-impact_eval(data=universo_f,endogenous_vars="transacted",treatment="treat",heterogenous_vars="population")
+eval15transpop<-eval15$transacted_population
+eval15transpop$nombre<-c("Control","Trat1","Trat2","Trat3","Trat4","Trat5","Trat6","Control","Trat1","Trat2","Trat3","Trat4","Trat5","Trat6")
+eval15_df<-as.data.frame(eval15transpop)
+
+ggplot2::ggplot(data=eval15_df,aes(x=nombre, y=estimate, fill=rownames(eval15_df)))+geom_bar(stat="identity")+guides(fill=FALSE)+labs(x="Tratamientos", y="transacting rate")+geom_text(aes(label=round(estimate,digits=2)))+facet_wrap(~population)
+
+# Efectos heterogéneos para gasto total
 
 ### 16 (2ptos). Repite el ejercicio para ``phone_verified`. 
 
