@@ -293,6 +293,19 @@ eval15_df<-as.data.frame(eval15transpop)
 
 ggplot2::ggplot(data=eval15_df,aes(x=nombre, y=estimate, fill=rownames(eval15_df)))+geom_bar(stat="identity")+guides(fill=FALSE)+labs(x="Tratamientos", y="transacting rate")+geom_text(aes(label=round(estimate,digits=2)))+facet_wrap(~population)
 
+```{r, results='asis', echo=FALSE}
+
+#para el total de compras:
+eval16<-impact_eval(data=universo_f,endogenous_vars="total_purchases_after",treatment="treat",heterogenous_vars="population")
+eval16total_pur<-eval16$total_purchases_after_population
+eval16total_pur$nombre<-c("Control","Trat1","Trat2","Trat3","Trat4","Trat5","Trat6","Control","Trat1","Trat2","Trat3","Trat4","Trat5","Trat6")
+eval16_df<-as.data.frame(eval16total_pur)
+
+ggplot2::ggplot(data=eval16_df,aes(x=nombre, y=estimate, fill=rownames(eval15_df)))+geom_bar(stat="identity")+guides(fill=FALSE)+labs(x="Tratamientos", y="transacting rate")+geom_text(aes(label=round(estimate,digits=2)))+facet_wrap(~population)
+
+
+```
+
 # Efectos heterogéneos para gasto total
 
 ### 16 (2ptos). Repite el ejercicio para ``phone_verified`. 
