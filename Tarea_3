@@ -210,7 +210,7 @@ ggplot2::ggplot(data=Tb2,aes(x=treat2, y=ComprasT.))+
 
 ### 13 (2ptos). Repite la medición en 11 pero ahora con `log(total_purchases_after+1)`. Que encuentras ahora? Interpreta las diferencias
 ```{r }
-universo_f$logtpa <- log(total_purchases+1)
+universo_f$logtpa <- log(universo_f$total_purchases+1)
 p13 <- lm(logtpa~treat2, data = universo_f)
 stargazer(p13,type = "text")
 
@@ -228,6 +228,7 @@ kbl(Tb3, booktabs = T, caption = "<center><strong>Logaritmo de las Compras Total
 ggplot2::ggplot(data=Tb3,aes(x=treat2, y=ComprasT.))+
   geom_bar(stat="identity")
 ```
+
 
 
 
