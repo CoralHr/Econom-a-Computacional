@@ -195,6 +195,8 @@ stargazer(as.data.frame(efe),type="latex",summary=FALSE, font.size = "small")
 ```
 Todos los valores p son suficientemente grandes, por lo que en ninguno de los grupos se rechaza la hipótesis de que las covariables no explican la Pr de pertenecer al tratamiento, lo cual nos da evidencia de que la asignación es aleatoria.
 ### 9. Elabora por qué parecen cumplirse los 3 supuestos de la asignación
+
+
 ```{r, results='asis', echo=FALSE, warning=FALSE, message=FALSE}
 
 datos<-as.data.frame(assignment$data)
@@ -204,7 +206,10 @@ prop.table(table(datos$treat, useNA = "ifany"))
 
 
 ```
-Basados en las probabilidades 
+Podemos verificar que se cumplen los tres supuestos: 
+SUTVA: Ya que estamos asignando a cada uno de los individuos tratimientos con mensajes a sus dispositivos privados (sin niguna publicidad aparte), estamos evitando que algún miembro de cada grupo asignado sepa la información que se le dio al otro, por lo que se cumple este supuesto.  
+Overlap: Podemos observar en la tabla que, las probabilidades de cada individuo de pertenecer a algún grupo de tratamiento esta entre 0 y 1, (sin incluirlos). Así porbamos este supuesto.
+Unconfoundness: Como se demostró en la tabla de balance conjunta podemos confirmar este supuesto ya que, al estar balanceada,sugiere que no existe ninguna relación entre la asignación de tratamiento y las características observablesy no observables de los individuos.
 
 ### 10. Elabora un pitch de negocio sobre los beneficios que este experimento podría dejar a Rappi. 
 
