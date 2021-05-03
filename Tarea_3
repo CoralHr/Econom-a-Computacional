@@ -199,6 +199,7 @@ load("d:/Users/marisol.nava/Desktop/Maestría/Eco_computacional/Tarea_3/base_eva
 ```{r, results='asis', echo=FALSE}
 
 eval10<-impact_eval(data=universo_f,endogenous_vars="transacted",treatment="treat")
+eval10<-as.data.frame(eval10)
 eval10$nombre<-c("Control","Trat1","Trat2","Trat3","Trat4","Trat5","Trat6")
 
 ggplot2::ggplot(data=eval10,aes(x=nombre, y=transacted.estimate, label=transacted.estimate,fill=rownames(eval10)))+geom_bar(stat="identity")+guides(fill=FALSE)+labs(x="Tratamientos", y="transacting rate")+geom_text(aes(label=scales::percent(transacted.estimate)))
