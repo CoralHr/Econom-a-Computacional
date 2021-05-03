@@ -76,7 +76,7 @@ View(universo)
 
 
 ### 2 (2pts). Como pueden notar, tenemos 2 poblaciones: Usuarios inactivos y usuarios que nunca estuvieron activos. Para ellos, las tasas de transaccionalidad son hasta ahora 7.94% y 0%. Utiliza esta información para hacer pruebas de poder: Dada esta tasa y población, cuál es el efecto mínimo detectable sobre la tasa de transaccionalidad como función de cuantas observaciones asignamos al grupo control? Interpreta. (Tip: asegurate de dejar claros los grupos comparados en esta prueba)
-```{r, results='asis', echo=FALSE}
+```{r, results='asis', echo=FALSE,warning=FALSE, message=FALSE}
 # Convertimos la variable population a factor para conocer el tamaño de cada grupo (Inactive, Never Active)
 universo$population<-factor(universo$population)
 summary(universo$population)
@@ -87,7 +87,7 @@ stargazer(tau2,type="latex",summary=FALSE,font.size="tiny")
 ```
 ### 3. Repite el mismo ejercicio pero ahora para usando las compras totales como variable objetivo. Elige un share de control con base en tu respuesta de esta y la anterior pregunta
 
-```{r, results='asis', echo=FALSE}
+```{r, results='asis', echo=FALSE, warning=FALSE, message=FALSE}
 (tau3<-tau_min(universo$total_purchases,N=nrow(universo),share_control = seq(0,1,0.05),n_groups=8))
 stargazer(tau3,type="latex",summary=FALSE, font.size="tiny")
 ```
@@ -106,7 +106,7 @@ attach(universo)
 
 #Generamos grupos de tratamiento y control a través de una asignación aleatoria estratificada por género, edad y tipo de población. 
 
-```{r, results='asis', echo=FALSE, warning=FALSE}
+```{r, results='asis', echo=FALSE, warning=FALSE, message=FALSE}
 # Convertimos age en cuartiles
 universo$agelabel<-ntile_label(universo$age,n=4)
 # Realizamos la asignación
