@@ -257,6 +257,27 @@ load("d:/Users/marisol.nava/Desktop/Maestría/Eco_computacional/Tarea_3/base_eva
 
 ### 10 (2ptos). Muestra el estimador ITT para la tasa de transaccionalidad. Recuerda que tu cliente es un grupo empresarial. Por ende, muestra una gráfica donde se aprecie la diferencia entre los grupos de tratamiento y las significancias de manera sencilla. Interpreta tus resultados 
 
+```{r }
+#Elaboremos una tabla de balance para revisar nuestro supuesto de unconfoundness y revisar si tendríamos que aumentar alguna variable para volver más eficiente nuestra regresión: 
+#para dicotómicas 
+universo_f_d<-universo_f%>%select(-user_id,-treat2,-total_purchases_after,-strata,-missfit,-logtotal_p,-transacted)
+
+#Volvemos factores algunas variables:
+universo_f_d<-dummy_cols(universo_f_d,select_columns = c("device_value","age_median", "phone_verified","population","gender_F"),remove_first_dummy = FALSE,remove_selected_columns = TRUE)
+
+
+tabla_c<-balance_table(universo_f_d,"treat")
+library(kableExtra)
+library(knitr)
+tabla_c %>%
+  kbl(booktabs = T,
+      caption = "Tabla 1: Aleatoriedad del instrumento") %>%
+  kable_material(c("striped", "hover"))
+
+
+```
+
+
 ```{r, results='asis', echo=FALSE}
 
 eval10<-impact_eval(data=universo_f,endogenous_vars="transacted",treatment="treat")
