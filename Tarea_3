@@ -188,6 +188,9 @@ load('Bases input/base_evaluacion.Rdata')
 
 ### 10 (2ptos). Muestra el estimador ITT para la tasa de transaccionalidad. Recuerda que tu cliente es un grupo empresarial. Por ende, muestra una gráfica donde se aprecie la diferencia entre los grupos de tratamiento y las significancias de manera sencilla. Interpreta tus resultados 
 ```{r }
+p10 <- lm(transacted~treat2, data = universo_f)
+stargazer(p10,type = "text")
+
 Tb1 <- universo_f %>%
   group_by(treat2) %>%
   summarize(transaccionalidad=mean(transacted))
@@ -205,6 +208,9 @@ ggplot2::ggplot(data=Tb1,aes(x=treat2, y=transaccionalidad))+
 
 ### 11. Repite el ejercicio sobre compras totales. Que resultados se aprecian? Que indica esto sobre la rentabilidad del sistema de incentivos? 
 ```{r }
+p11 <- lm(total_purchases_after~treat2, data = universo_f)
+stargazer(p11,type = "text")
+
 Tb2 <- universo_f %>%
   group_by(treat2) %>%
   summarize(ComprasT.=mean(total_purchases_after))
