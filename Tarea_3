@@ -189,7 +189,7 @@ Carguemos la base
 ```{r }
 rm(list = ls())
 
-load('Bases input/base_evaluacion.Rdata')
+load("d:/Users/marisol.nava/Desktop/Maestría/Eco_computacional/Tarea_3/base_evaluacion.Rdata")
 
 
 ```
