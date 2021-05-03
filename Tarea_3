@@ -179,8 +179,21 @@ load('Bases input/base_evaluacion.Rdata')
 ```
 
 ### 10 (2ptos). Muestra el estimador ITT para la tasa de transaccionalidad. Recuerda que tu cliente es un grupo empresarial. Por ende, muestra una gráfica donde se aprecie la diferencia entre los grupos de tratamiento y las significancias de manera sencilla. Interpreta tus resultados 
+```{r }
+Tb1 <- universo_f %>%
+  group_by(treat2) %>%
+  summarize(transaccionalidad=mean(transacted))
+Tb1$ITT <- Tb1$transaccionalidad-0.01
+
+kbl(Tb1, booktabs = T, caption = "<center><strong>Transaccionalidad promedio por tratamiento</strong></center>",
+    digits = c(2,2,2,2,2)) %>%
+  kable_classic_2(full_width = F, html_font = "Cambria", fixed_thead = T)
 
 
+ggplot2::ggplot(data=Tb1,aes(x=treat2, y=transaccionalidad))+
+  geom_bar(stat="identity")
+  
+```
 
 ### 11. Repite el ejercicio sobre compras totales. Que resultados se aprecian? Que indica esto sobre la rentabilidad del sistema de incentivos? 
 
