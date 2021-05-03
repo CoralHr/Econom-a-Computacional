@@ -94,6 +94,10 @@ stargazer(tau3,type="latex",summary=FALSE, font.size="tiny")
 
 ### 4 (2ptos) Qué variables crees que puedan estar más correlacionadas con el impacto? Justifica tu respuesta y elige un set
 
+Edad, género y tipo de población podrían estar más correlacionadas con el impacto de tratamiento. 
+En particular, las personas de distinta edad podrían reaccionar distinto al hecho de recibir el mensaje o recibir cupones; por ejemplo, a los más jóvenes podría darles flojera leer sobre las nuevas tiendas afiliadas pero podrían reaccionar mejor al recibir cupones (ya que podrían tener un presupuesto más limitado para gastar a través de la app, que las personas de mayor edad). 
+También hombres y mujeres podrían reaccionar diferente a recibir el mensaje pues podría ser que alguno de ellos, por ejemplo, las mujeres, se encarguen más frecuentemente de realizar las compras, por lo que están más familiarizadas con las tiendas disponibles en la app y reaccionen mejor ante el conocimiento de nuevas tiendas que se agregan.  
+Por otra parte, el tipo de población de que se trate (never active o unactive) también puede estar muy relacionado con el impacto, pues se esperaría que haya un mayor impacto para aquellos que han estado activos alguna vez vs los que nunca han estado activos, quienes tendrían una "barrera" de uso mayor.
 
 ### 5 (2ptos) Realiza la asignación aleatoria. Muestra la distribución de los grupos por estrato, los misfits. Sin mirar el balance, lograron una asignación aleatoria exitosa? Justifica tu respuesta 
 ```{r }
