@@ -208,22 +208,13 @@ ggplot2::ggplot(data=eval10,aes(x=nombre, y=transacted.estimate, fill=rownames(e
 El ITT sobre la tasa de transaccionalidad es mayor para quienes recibieron el tratamiento 4 (impacto de 10 puntos porcentuales), que consistió en dar un descuento de 25% en la siguiente compra, seguido de los que recibieron el tratamiento 6 (impacto de 7 puntos porcentuales), que consistió en un 4% de descuento por usuario referido.
 
 ### 11. Repite el ejercicio sobre compras totales. Que resultados se aprecian? Que indica esto sobre la rentabilidad del sistema de incentivos? 
-```{r }
-p11 <- lm(total_purchases_after~treat2, data = universo_f)
-stargazer(p11,type = "text")
+```{r, results='asis', echo=FALSE}
 
-Tb2 <- universo_f %>%
-  group_by(treat2) %>%
-  summarize(ComprasT.=mean(total_purchases_after))
-Tb2$ITT <- Tb2$ComprasT.-32.64
+eval11<-impact_eval(data=universo_f,endogenous_vars="total_purchases_after",treatment="treat")
+eval11<-as.data.frame(eval11)
+eval11$nombre<-c("Control","Trat1","Trat2","Trat3","Trat4","Trat5","Trat6")
 
-kbl(Tb2, booktabs = T, caption = "<center><strong>Compras Totales promedio por tratamiento</strong></center>",
-    digits = c(2,2,2,2,2)) %>%
-  kable_classic_2(full_width = F, html_font = "Cambria", fixed_thead = T)
-
-
-ggplot2::ggplot(data=Tb2,aes(x=treat2, y=ComprasT.))+
-  geom_bar(stat="identity")
+ggplot2::ggplot(data=eval11,aes(x=nombre, y=total_purchases_after.estimate, fill=rownames(eval11)))+geom_bar(stat="identity")+guides(fill=FALSE)+labs(x="Tratamientos", y="gasto total")+geom_text(aes(label=round(total_purchases_after.estimate,digits=2)))
 
 ```
 Cuando se repite el ejercicio pero esta vez con el gasto total post-tratamiento podemos notar que solo los tratamientos "BTC 100" y "USD 200" reportan un gasto total promedio mayor que aquellos usuarios que no recibieron incentivos. Sin embargo ninguna de estas estimaciones es estadísticamente significativa.
