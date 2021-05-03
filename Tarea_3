@@ -106,36 +106,13 @@ attach(universo)
 
 #Generamos grupos de tratamiento y control a través de una asignación aleatoria estratificada por género, edad y tipo de población. 
 
+```{r, results='asis', echo=FALSE, warning=FALSE}
 # Convertimos age en cuartiles
-
-quantile(age, prob=c(0,1/4,2/4,3/4,1))
-universo$age_cuart<-cut(age,
-                      breaks=c(18,20,26,34,84), 
-                      labels=c("Q1","Q2","Q3","Q4"))
-#Volvemos age en percentiles
-quantile(age, prob=seq(0, 1, length = 11))
-
-universo$age_dec<-cut(age,
-                      breaks =c(18,19,20,21,23,26,28,32,37,45,84), 
-                      labels= c("Q1","Q2","Q3","Q4",
-                          "Q5","Q6","Q7","Q8","Q9","Q10"))
-
-###FALTA definir la asigación al grupo de control##
-
-assigment<-treatment_assign(data = universo, share_control = 0.1, n_t = 7,
-                            strata_varlist = dplyr::vars(age_cuart, 
-                            gender_F), missfits = "strata", 
-                            seed = 1990, key = "user_id")
-table(universo$treat, useNA = "ifany")
-prop.table(table(universo$treat, useNA = "ifany"))
-```
-
-```{r, results='asis', echo=FALSE}
 universo$agelabel<-ntile_label(universo$age,n=4)
-
-treatment_assign(data = universo, share_control = 0.3, n_t = 7, strata_varlist =dplyr::vars(agelabel, gender_F, population), missfits="strata", seed = 1990, key = "user_id")
-table(universo$treat, useNA = "ifany")
-prop.table(table(universo$treat, useNA = "ifany"))
+# Realizamos la asignación
+assignment<-treatment_assign(data = universo, share_control = 0.3, n_t = 7, strata_varlist =dplyr::vars(agelabel, gender_F, population), missfits="NA", seed = 1990, key = "user_id")
+tabla<-as.data.frame(assignment$summary_strata)
+stargazer(tabla,type="latex",summary=FALSE)
 
 ```
 
@@ -144,12 +121,7 @@ Como solo se encontraron 91 missfits, se optó por eliminarlos del experimento.
 
 
 ### 7. Realiza las pruebas de balance t sobre todas las variables (Tip: transforma las categóricas en dummys). Parece haber balance?  
-Transformar variables categoricas
-```{r }
-universo <- universo %>% mutate(universo, inactive=ifelse(population=="Inactive",1,0),
-                                never_active=ifelse(population=="Never Active",1,0))
 
-```
 
 ### 8. Repite el ejercicio pero ahora con pruebas de balance conjuntas. Muestra los resultados (incluyendo el estadístico de prueba, grados de libertad y p values) Interpreta
 
