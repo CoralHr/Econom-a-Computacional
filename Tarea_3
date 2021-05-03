@@ -140,6 +140,7 @@ prop.table(table(universo$treat, useNA = "ifany"))
 ```
 
 ### 6. Qué elección tomaron sobre como manejar los misfits? Elaboren sus razones
+Como solo se encontraron 91 missfits, se optó por eliminarlos del experimento. 
 
 
 ### 7. Realiza las pruebas de balance t sobre todas las variables (Tip: transforma las categóricas en dummys). Parece haber balance?  
