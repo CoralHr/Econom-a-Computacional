@@ -204,6 +204,21 @@ ggplot2::ggplot(data=Tb1,aes(x=treat2, y=transaccionalidad))+
 ```
 
 ### 11. Repite el ejercicio sobre compras totales. Que resultados se aprecian? Que indica esto sobre la rentabilidad del sistema de incentivos? 
+```{r }
+Tb2 <- universo_f %>%
+  group_by(treat2) %>%
+  summarize(ComprasT.=mean(total_purchases_after))
+Tb2$ITT <- Tb2$ComprasT.-32.64
+
+kbl(Tb2, booktabs = T, caption = "<center><strong>Compras Totales promedio por tratamiento</strong></center>",
+    digits = c(2,2,2,2,2)) %>%
+  kable_classic_2(full_width = F, html_font = "Cambria", fixed_thead = T)
+
+
+ggplot2::ggplot(data=Tb2,aes(x=treat2, y=ComprasT.))+
+  geom_bar(stat="identity")
+
+```
 
 
 ### 12. Interpreta el impacto del gruop de referidos 4%. Porque el estimador es tan diferente y a la vez es no significativo? Por que esto no paso en la tasa de transaccionalidad?
