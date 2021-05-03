@@ -144,7 +144,8 @@ tabla_b<-balance_table(universo_dum,"treat")
 stargazer(as.data.frame(tabla_b),type="latex",summary=FALSE, keep=c(2,11:17))
                             
 ```
-
+En general parece haber balance, pues con un 5% de significancia, solo hay 5 de 84 pruebas t que se rechazan. Sin embargo, hay 2 variables (device_value_[0-10,000] y device_value_No info) que concentran 4 de esas pruebas, por lo que podrían estar desbalanceadas.
+ 
 ### 8. Repite el ejercicio pero ahora con pruebas de balance conjuntas. Muestra los resultados (incluyendo el estadístico de prueba, grados de libertad y p values) Interpreta
 
 
