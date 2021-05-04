@@ -324,8 +324,24 @@ En esta tercera estimación se ocuparon los logaritmos del gasto total post-trat
 
 
 ### 14 (4ptos). Describre que variables necesitas para hacer un análisis costo beneficio completo. Les doy algunas: Ticket promedio $100, Customer Lifetime value: $1,100. Con esto, que sistema de incentivos recomendarías? Porqué? Muestra el razonamiento detrás de tu recomendación
+Para el analisis costo beneficio es importante destacar que se busca el mayor alcanze (utilidad) al menor uso de dinero o recursos.
+El alcance puede ser por beneficios directos como: ticket promedio, numero de nuevos usuarios y/o transaccionalidad.
+Asi, como tambien puede ser por beneficios indirectos: un incremento en el customer lifetime value, reduccion de incurrir en algun gasto. 
 
+Las variables que se recomiendan tomar en cuenta por lo tanto son:
+Gasto total promedio 
+Beneficio total por tratamiento
+Beneficio total por usuario
+Costo total del tratamiento 
+Costo total por usuario
+Razon costo-beneficio neto
+Ticket promedio
+Customer Lifetime value
+Transaccionalidad
+Nuevos usuarios
+Nuevos usuarios por edad 
 
+Ticket retorno sobre tratamiento
 ### 15 (2ptos). Realiza la estimación de efectos heterogeneos para ambas variables usando `population`. Que encuentras? existe alguna subpoblación para la que los efectos difieran del promedio? Para cada efecto, muestra gráficas como lo hiciste en los ITTs
 ```{r, results='asis', echo=FALSE}
 
