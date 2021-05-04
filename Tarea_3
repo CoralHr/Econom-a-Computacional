@@ -396,4 +396,11 @@ ggplot2::ggplot(data=eval18_df,aes(x=nombre, y=estimate, fill=rownames(eval18_df
 
 ```
 
-### 17. Presenta una propuesta de focalización con base en tus resultados generales y heterogeneos. 
+### 17. Presenta una propuesta de focalización con base en tus resultados generales y heterogeneos.
+
+1. El valor agregado ha sido encontrar el impacto de los diversos tratamientos sobre el gasto, 
+por tanto se propone crear un algoritmo con el objetivo de identificar a los usuarios potenciales para cada tratamiento. 
+Esto puede ser mediante clustering para encontrar el perfil de usuarios que tuvieron respuesta positiva ante los incentivos. 
+De esta manera, en lugar de aleatorizar se podria focalizar a un grupo y tener una campaña mas intensiva. 
+
+2. 
