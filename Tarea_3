@@ -355,6 +355,13 @@ eval15_df<-as.data.frame(eval15transpop)
 
 ggplot2::ggplot(data=eval15_df,aes(x=nombre, y=estimate, fill=rownames(eval15_df)))+geom_bar(stat="identity")+guides(fill=FALSE)+labs(x="Tratamientos", y="transacting rate")+geom_text(aes(label=round(estimate,digits=2)))+facet_wrap(~population)
 
+
+#promedio
+eval15trans<-eval15$transacted
+eval15trans$nombre<-c("Control","Trat1","Trat2","Trat3","Trat4","Trat5","Trat6")
+eval15trans_df<-as.data.frame(eval15trans)
+ggplot2::ggplot(data=eval15trans_df,aes(x=nombre, y=estimate, fill=rownames(eval15trans_df)))+geom_bar(stat="identity")+guides(fill=FALSE)+labs(x="Tratamientos", y="transacting rate")+geom_text(aes(label=round(estimate,digits=2)))
+
 ```{r, results='asis', echo=FALSE}
 
 #para gasto total:
