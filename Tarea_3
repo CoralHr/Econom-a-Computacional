@@ -372,11 +372,7 @@ eval16_df<-as.data.frame(eval16total_pur)
 
 ggplot2::ggplot(data=eval16_df,aes(x=nombre, y=estimate, fill=rownames(eval16_df)))+geom_bar(stat="identity")+guides(fill=FALSE)+labs(x="Tratamientos", y="gasto total")+geom_text(aes(label=round(estimate,digits=2)))+facet_wrap(~population)
 
-#promedio_gt
-eval15total<-eval15gt$total_purchases_after
-eval15total$nombre<-c("Control","Trat1","Trat2","Trat3","Trat4","Trat5","Trat6")
-eval15total_df<-as.data.frame(eval15total)
-ggplot2::ggplot(data=eval15total_df,aes(x=nombre, y=estimate, fill=rownames(eval15total_df)))+geom_bar(stat="identity")+guides(fill=FALSE)+labs(x="Tratamientos", y="gasto total")+geom_text(aes(label=round(estimate,digits=2)))
+
 ```
 
 
@@ -415,3 +411,179 @@ Esto puede ser mediante clustering para encontrar el perfil de usuarios que tuvi
 De esta manera, en lugar de aleatorizar se podria focalizar a un grupo y tener una campaña mas intensiva. 
 
 2. 
+
+
+
+###PREGUNTAS 10, 11, 13, 15 Y 16 CORREGIDAS 
+### 10 (2ptos). Muestra el estimador ITT para la tasa de transaccionalidad. Recuerda que tu cliente es un grupo empresarial. Por ende, muestra una gráfica donde se aprecie la diferencia entre los grupos de tratamiento y las significancias de manera sencilla. Interpreta tus resultados
+
+
+```{r }
+#Elaboremos una tabla de balance para revisar nuestro supuesto de unconfoundness y revisar si tendríamos que aumentar alguna variable para volver más eficiente nuestra regresión: 
+#no se consideras las variables que ya utilizamos para estratificar 
+universo_f_d<-universo_f%>%select(-user_id,-treat2,-total_purchases_after,-device_value,-missfit,-logtotal_p,-transacted,-age_median,-strata)
+
+#Volvemos factores algunas variables:
+universo_f_d<-dummy_cols(universo_f_d,select_columns = c( "phone_verified","population","gender_F"),remove_first_dummy = FALSE,remove_selected_columns = TRUE)
+
+
+tabla_c<-balance_table(universo_f_d,"treat")
+library(kableExtra)
+library(knitr)
+tabla_c %>%
+  kbl(booktabs = T,
+      caption = "Tabla 1: Aleatoriedad del instrumento") %>%
+  kable_material(c("striped", "hover"))
+
+
+```
+Las variables estadísiticamente significativas a un nivel de significancia de 10% son: 
+
+-Age
+-total_purchases
+
+```{r, results='asis', echo=FALSE}
+
+universo_f$phone_verified<-factor(universo_f$phone_verified)
+#como se estratificó por las variables phone_verified, population y device_value incluimos los efectos fijos: 
+
+eval10<-impact_eval(data = universo_f, 
+                       endogenous_vars = c("transacted"), 
+                       treatment = "treat", 
+                       heterogenous_vars = c("phone_verified","population","device_value"), 
+                       fixed_effect_vars = c("phone_verified","population","device_value"), 
+                       control_vars = c("age","total_purchases"))
+
+eval10<-as.data.frame(eval10$transacted)
+View(eval10)
+eval10$nombre<-c("Trat1","Trat2","Trat3","Trat4","Trat5","Trat6","Age","Total_purchases")
+
+
+ggplot2::ggplot(data=eval10,aes(x=nombre, y=estimate, fill=rownames(eval10)))+geom_bar(stat="identity")+guides(fill=FALSE)+labs(x="Tratamientos", y="transacting rate")+geom_text(aes(label=round(estimate,digits=2)))
+
+
+```
+
+El ITT sobre la tasa de transaccionalidad es mayor para quienes recibieron el tratamiento 4 (impacto de .10 puntos porcentuales), que consistió en dar un descuento de 25% en la siguiente compra, seguido de los que recibieron el tratamiento 6 (impacto de 7 puntos porcentuales), que consistió en un 4% de descuento por usuario referido.
+
+####### 11. Repite el ejercicio sobre compras totales. Que resultados se aprecian? Que indica esto sobre la rentabilidad del sistema de incentivos? 
+```{r, results='asis', echo=FALSE}
+
+#como se estratificó por las variables phone_verified, population y device_value incluimos los efectos fijos: 
+
+eval11<-impact_eval(data = universo_f, 
+                       endogenous_vars = c("total_purchases_after"), 
+                       treatment = "treat", 
+                       heterogenous_vars = c("phone_verified","population","device_value"), 
+                       fixed_effect_vars = c("phone_verified","population","device_value"), 
+                       control_vars = c("age","total_purchases"))
+
+eval11<-as.data.frame(eval11$total_purchases_after)
+View(eval11)
+eval11$nombre<-c("Trat1","Trat2","Trat3","Trat4","Trat5","Trat6","Age","Total_purchases")
+
+
+ggplot2::ggplot(data=eval11,aes(x=nombre, y=estimate, fill=rownames(eval11)))+geom_bar(stat="identity")+guides(fill=FALSE)+labs(x="Tratamientos", y="transacting rate")+geom_text(aes(label=round(estimate,digits=2)))
+
+
+```
+Cuando se repite el ejercicio pero esta vez con el gasto total post-tratamiento podemos notar que solo el tratamiento 6 (Ofrecer 4% de descuento en la siguiente compra por cada usuario que refieran) reporta un impacto postivo, en comparación a los otros grupos de tratamiento. Sin embargo ninguna de estas estimaciones es estadísticamente significativa.
+
+### ####12. Interpreta el impacto del grupo de referidos 4%. Porque el estimador es tan diferente y a la vez es no significativo? Por que esto no paso en la tasa de transaccionalidad?
+Esto sucedió debido a la variación tan grande que existe entre los distintos gastos en los diversos estímulos a los usuarios, de igual forma esta variación afecto la significancia.
+
+### 13 (2ptos). Repite la medición en 11 pero ahora con `log(total_purchases_after+1)`. Que encuentras ahora? Interpreta las diferencias
+
+
+```{r, results='asis', echo=FALSE}
+universo_f$logtotal_p<-log(universo_f$total_purchases_after+1)
+
+eval13<-impact_eval(data = universo_f, 
+                       endogenous_vars = c("logtotal_p"), 
+                       treatment = "treat", 
+                       heterogenous_vars = c("phone_verified","population","device_value"), 
+                       fixed_effect_vars = c("phone_verified","population","device_value"), 
+                       control_vars = c("age","total_purchases"))
+
+View(eval13)
+
+eval13<-as.data.frame(eval13$logtotal_p)
+eval13$nombre<-c("Trat1","Trat2","Trat3","Trat4","Trat5","Trat6","Age","Total_purchases")
+
+ggplot2::ggplot(data=eval13,aes(x=nombre, y=estimate, fill=rownames(eval13)))+geom_bar(stat="identity")+guides(fill=FALSE)+labs(x="Tratamientos", y="log gasto total")+geom_text(aes(label=round(estimate,digits=2)))
+
+
+View(eval13)
+
+
+```
+En esta tercera estimación se ocuparon los logaritmos del gasto total post-tratamiento con la finalidad de reducir la sensibilidad de las estimaciones a las observaciones extremas o atípicas, de tal forma que a diferencia del resultado anterior se pueden notar impactos positivos en los tratamientos 1, 2, 3 y 4 y no negativas, aunque la significancia sigue siendo nula.También algo muy importante que podemos rescatar es que el efecto de tratamiento no es enorme, como el estimación pasada.
+
+### 15 (2ptos). Realiza la estimación de efectos heterogeneos para ambas variables usando `population`. Que encuentras? existe alguna subpoblación para la que los efectos difieran del promedio? Para cada efecto, muestra gráficas como lo hiciste en los ITTs
+```{r, results='asis', echo=FALSE}
+
+# Efectos heterogéneos para transaccionalidad 
+#Retiramos la variable de control "total_purchases"
+
+eval15<-impact_eval(data=universo_f,endogenous_vars="transacted",treatment = "treat", 
+                       heterogenous_vars = c("phone_verified","population","device_value"), 
+                       fixed_effect_vars = c("phone_verified","population","device_value"), 
+                       control_vars = c("age"))
+
+eval15transpop<-eval15$transacted_population
+
+eval15transpop$nombre<-c("Trat1","Trat2","Trat3","Trat4","Trat5","Trat6","Age","Trat1","Trat2","Trat3","Trat4","Trat5","Trat6","Age")
+eval15_df<-as.data.frame(eval15transpop)
+
+
+ggplot2::ggplot(data=eval15_df,aes(x=nombre, y=estimate, fill=rownames(eval15_df)))+geom_bar(stat="identity")+guides(fill=FALSE)+labs(x="Tratamientos", y="transacting rate")+geom_text(aes(label=round(estimate,digits=2)))+facet_wrap(~population)
+```
+
+```{r, results='asis', echo=FALSE}
+
+#para gasto total:
+eval16<-impact_eval(data=universo_f,endogenous_vars="logtotal_p",treatment = "treat", 
+                       heterogenous_vars = c("phone_verified","population","device_value"), 
+                       fixed_effect_vars = c("phone_verified","population","device_value"), 
+                       control_vars = c("age"))
+
+
+eval16total_pur<-eval16$logtotal_p_population
+eval16total_pur$nombre<-c("Trat1","Trat2","Trat3","Trat4","Trat5","Trat6","Age","Trat1","Trat2","Trat3","Trat4","Trat5","Trat6","Age")
+eval16_df<-as.data.frame(eval16total_pur)
+
+ggplot2::ggplot(data=eval16_df,aes(x=nombre, y=estimate, fill=rownames(eval16_df)))+geom_bar(stat="identity")+guides(fill=FALSE)+labs(x="Tratamientos", y="gasto total")+geom_text(aes(label=round(estimate,digits=2)))+facet_wrap(~population)
+
+
+```
+### 16 (2ptos). Repite el ejercicio para ``phone_verified`. 
+
+```{r, results='asis', echo=FALSE}
+# Efectos heterogéneos para transaccionalidad
+
+universo_f$phone_verified<-factor(universo_f$phone_verified)
+eval16t<-impact_eval(data=universo_f,endogenous_vars="transacted",treatment = "treat", 
+                       heterogenous_vars = c("phone_verified","population","device_value"), 
+                       fixed_effect_vars = c("phone_verified","population","device_value"), 
+                       control_vars = c("age"))
+
+eval16t<-eval16t$transacted_phone_verified
+eval16t$nombre<-c("Trat1","Trat2","Trat3","Trat4","Trat5","Trat6","Age","Trat1","Trat2","Trat3","Trat4","Trat5","Trat6","Age")
+eval16t_df<-as.data.frame(eval16t)
+
+ggplot2::ggplot(data=eval16t_df,aes(x=nombre, y=estimate, fill=rownames(eval16t_df)))+geom_bar(stat="identity")+guides(fill=FALSE)+labs(x="Tratamientos", y="transacting rate")+geom_text(aes(label=round(estimate,digits=2)))+facet_wrap(~phone_verified)
+
+# Para gasto total 
+
+eval18<-impact_eval(data=universo_f,endogenous_vars="logtotal_p",treatment = "treat", 
+                       heterogenous_vars = c("phone_verified","population","device_value"), 
+                       fixed_effect_vars = c("phone_verified","population","device_value"), 
+                       control_vars = c("age"))
+eval18total_pur<-eval18$logtotal_p_phone_verified
+eval18total_pur$nombre<-c("Trat1","Trat2","Trat3","Trat4","Trat5","Trat6","Age","Trat1","Trat2","Trat3","Trat4","Trat5","Trat6","Age")
+eval18_df<-as.data.frame(eval18total_pur)
+
+ggplot2::ggplot(data=eval18_df,aes(x=nombre, y=estimate, fill=rownames(eval18_df)))+geom_bar(stat="identity")+guides(fill=FALSE)+labs(x="Tratamientos", y="gasto total")+geom_text(aes(label=round(estimate,digits=2)))+facet_wrap(~phone_verified)
+
+
+```
