@@ -300,8 +300,8 @@ eval11$nombre<-c("Control","Trat1","Trat2","Trat3","Trat4","Trat5","Trat6")
 ggplot2::ggplot(data=eval11,aes(x=nombre, y=total_purchases_after.estimate, fill=rownames(eval11)))+geom_bar(stat="identity")+guides(fill=FALSE)+labs(x="Tratamientos", y="gasto total")+geom_text(aes(label=round(total_purchases_after.estimate,digits=2)))
 
 ```
-Cuando se repite el ejercicio pero esta vez con el gasto total post-tratamiento podemos notar que solo los tratamientos "BTC 100" y "USD 200" reportan un gasto total promedio mayor que aquellos usuarios que no recibieron incentivos. Sin embargo ninguna de estas estimaciones es estadísticamente significativa.
-
+Cuando se repite el ejercicio pero esta vez con el gasto total post-tratamiento podemos notar que solo el tratamiento 6 reporta un gasto total promedio mayor que aquellos usuarios que no recibieron incentivos. Sin embargo ninguna de estas otras estimaciones es estadísticamente significativa.
+Con estos indicios, para los tratamientos 1-5 parece que no es rentable dar incentivos porque no se logra que los usuarios gasten más en la app (incluso parece que algunos gastan menos).
 
 ### 12. Interpreta el impacto del grupo de referidos 4%. Porque el estimador es tan diferente y a la vez es no significativo? Por que esto no paso en la tasa de transaccionalidad?
 Dada la asignación aleatoria, el estimador de Trat6 fue de 111, sin embargo no fue significativo (p-value = .59), esto sucedió debido a la variación tan grande que existe entre los distintos gastos en los diversos estímulos a los usuarios, de igual forma esta variación afecto la significancia.
