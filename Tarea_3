@@ -341,7 +341,8 @@ Transaccionalidad
 Nuevos usuarios
 Nuevos usuarios por edad 
 
-Ticket retorno sobre tratamiento
+De acuerdo a los datos y tomando en cuenta el ticket promedio $100 y customer lifetimevalue $1100, se elige el tratamiento 6, porque el costo es bajo (no es el mas bajo tampoco pero si con mayor impacto) y el valor agregado de un nuevo usuario es muy alto (en promedio).
+
 ### 15 (2ptos). Realiza la estimación de efectos heterogeneos para ambas variables usando `population`. Que encuentras? existe alguna subpoblación para la que los efectos difieran del promedio? Para cada efecto, muestra gráficas como lo hiciste en los ITTs
 ```{r, results='asis', echo=FALSE}
 
