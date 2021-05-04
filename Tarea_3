@@ -372,7 +372,11 @@ eval16_df<-as.data.frame(eval16total_pur)
 
 ggplot2::ggplot(data=eval16_df,aes(x=nombre, y=estimate, fill=rownames(eval16_df)))+geom_bar(stat="identity")+guides(fill=FALSE)+labs(x="Tratamientos", y="gasto total")+geom_text(aes(label=round(estimate,digits=2)))+facet_wrap(~population)
 
-
+#promedio_gt
+eval15total<-eval15gt$total_purchases_after
+eval15total$nombre<-c("Control","Trat1","Trat2","Trat3","Trat4","Trat5","Trat6")
+eval15total_df<-as.data.frame(eval15total)
+ggplot2::ggplot(data=eval15total_df,aes(x=nombre, y=estimate, fill=rownames(eval15total_df)))+geom_bar(stat="identity")+guides(fill=FALSE)+labs(x="Tratamientos", y="gasto total")+geom_text(aes(label=round(estimate,digits=2)))
 ```
 
 
