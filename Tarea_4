@@ -68,6 +68,16 @@ crm<-
 #### Data cleaning
 
 1. Haz una primera revisión de la base. Cuantas variables tienen `NA`
+```{r}
+mssng <- as.data.frame(sapply(crm, function(x) sum(is.na(x))))
+colnames(mssng) <- c("MV")
+mssng2 <- subset(mssng, MV > 0)
+colnames(mssng2) <- c("Número de Missing Values")
+kbl(mssng2, booktabs = T, caption = "<center><strong>Missing Values de las variables</strong></center>") %>%
+kable_classic_2(full_width = F, html_font = "Cambria", fixed_thead = T)
+```
+
+No encontramos variables que tengan NA
 
 
 2. Muestra la matriz de correlación entre variables. Muestra los pares de variables que tienen más de 95% de correlación. Remueve una de cada par multicolineal. 
