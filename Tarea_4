@@ -87,6 +87,7 @@ library(knitr)
 kbl(tabla1, booktabs = T, caption = "<center><strong>Missing Values de las variables</strong></center>") %>%
 kable_classic_2(full_width = F, html_font = "Cambria", fixed_thead = T)
 ```
+####QUEDA SUPEEEER PENDIENTE REVISAR LO DE LOS 0'S########
 
 
 2. Muestra la matriz de correlación entre variables. Muestra los pares de variables que tienen más de 95% de correlación. Remueve una de cada par multicolineal. 
