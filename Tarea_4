@@ -79,6 +79,15 @@ kable_classic_2(full_width = F, html_font = "Cambria", fixed_thead = T)
 
 No encontramos variables que tengan NA
 
+###NO SE PORQUE NO ME APARECE NADA EN LA TABLA, PERO CON ESTE CÓDIGO SI, UTILIZANDO EL MISMO FORMATO QUE DANI ###
+```{r}
+tabla1<-apply(is.na(crm), 2, mean)
+library(kableExtra)
+library(knitr)
+kbl(tabla1, booktabs = T, caption = "<center><strong>Missing Values de las variables</strong></center>") %>%
+kable_classic_2(full_width = F, html_font = "Cambria", fixed_thead = T)
+```
+
 
 2. Muestra la matriz de correlación entre variables. Muestra los pares de variables que tienen más de 95% de correlación. Remueve una de cada par multicolineal. 
 
