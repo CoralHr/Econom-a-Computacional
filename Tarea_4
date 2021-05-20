@@ -136,7 +136,7 @@ Variables desbalanceadas
 
 ```{r}
 which( colnames(crm)=="mailing_indicator")
-fuzzySim::FDR(data = crm, sp.cols = 154, var.cols = 1:156)
+fuzzySim::FDR(data = crm, sp.cols = 154, var.cols = 1:156, , q = 0.1)
 ```
 
 
