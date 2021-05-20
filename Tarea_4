@@ -134,9 +134,58 @@ Variables desbalanceadas
 
 4. Realize un ajuste de False Discovery Rate al 10%. Cuántas variables salen desbalanceadas ahora? 
 
+4. Realize un ajuste de False Discovery Rate al 10%. Cuántas variables salen desbalanceadas ahora? 
+
+
 ```{r}
-which( colnames(crm)=="mailing_indicator")
-fuzzySim::FDR(data = crm, sp.cols = 154, var.cols = 1:156, , q = 0.1)
+#CON REGRESIÓN (NO CREO QUE SEA LA CORRECTA)
+attach(crm)
+fit <-lm(outcome_spend~., data = crm)
+library(broom)
+
+resultados<-tidy(fit)
+
+resultados<-
+  resultados%>%
+  arrange(p.value)%>%
+  mutate(ranking =row_number())
+
+resultados<-
+  resultados%>%
+  mutate(corte_fdr = 0.1*ranking/nrow(resultados),sig_fdr =if_else(p.value<=corte_fdr,'Significativa','No significativa'))
+
+table(resultados$sig_fdr)
+```
+
+```{r}
+#CON TABLA DE BALANCE ANTERIOR :
+tabla_b<-
+  tabla_b%>%
+  arrange(p_value1)%>%
+  mutate(ranking =row_number())
+
+tabla_b<-
+  tabla_b%>%
+  mutate(corte_fdr = 0.1*ranking/nrow(tabla_b),
+  sig_fdr=if_else(p_value1<=corte_fdr,'Significativa','No significativa'))
+
+table(tabla_b$sig_fdr)
+
+
+```
+
+
+Ahora salen solo 2 variables desbalanceadas :
+outcome_spend
+spend_online_b_3yr
+
+```{r}
+tabla_b %>%
+  kbl(booktabs = T,
+      caption = "Tabla 1: Prueba de Balance (T)")%>%
+  kable_material(c("striped", "hover"))
+
+
 ```
 
 
