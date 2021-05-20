@@ -100,7 +100,10 @@ cormat <- rquery.cormat(crm, type="flatten", graph=FALSE)
 
 
 3 (2 pts). Corroba que la asignación tratamiento fue aleatoria mediante revisión del balance. Realiza las pruebas balance T y F. Cuántas variables salen desbalanceadas? Que muestra esto sobre la asignación de tratamiento?
-
+```{r{
+tabla <- balance_table(crm, treatment="mailing_indicator")
+stargazer(as.data.frame(tabla), type="text", summary=FALSE)
+```
 
 4. Realize un ajuste de False Discovery Rate al 10%. Cuántas variables salen desbalanceadas ahora? 
 
