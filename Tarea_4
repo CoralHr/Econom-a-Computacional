@@ -257,25 +257,9 @@ kable(crm%>%
         mutate(share = 100*n/sum(n)), digits = 2)
 #####AQUÍ ES DONDE YA NO SE QUE HACER CON LA VIDAAAAAAA :( #########
 #La distribución es: 
-datos_train <- crm[training_sample, ]
-datos_test  <- crm[-training_sample, ]
-
-crm %>%
-count(mailing_indicator)
-crm_V<-
-  crm%>%
-  filter(mailing_indicator==1)%>%
-  select(-mailing_indicator)
-
-
-crm_T<-
-  crm%>%
-  filter(mailing_indicator==0)%>%
-  select(-mailing_indicator)
+crm_train <- crm[training_sample, ]
+crm_test  <- crm[-training_sample, ]
   
-
-
-
 ####Double Debiased LASSO
 
 6 (3pts). Estima un Double Debiased LASSO. Asegurate de mostrar el código. (Tip: recuerda que necesitas guardar el LASSO de cada K para poder usarlo en la base de validación)
