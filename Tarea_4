@@ -131,7 +131,7 @@ Variables desbalanceadas
 
 ```
 
-4. Realize un ajuste de False Discovery Rate al 10%. Cuántas variables salen desbalanceadas ahora? 
+
 
 4. Realize un ajuste de False Discovery Rate al 10%. Cuántas variables salen desbalanceadas ahora? 
 
@@ -249,6 +249,30 @@ Usaremos el training sample para estimar el Conditional Average Treatment Effect
 \bigskip
 
 Separa la base de entrenamiento de la de validación
+
+#Vemos la distribución 
+kable(crm%>%
+        group_by(training_sample)%>%
+        summarise(n =n())%>%
+        mutate(share = 100*n/sum(n)), digits = 2)
+#####AQUÍ ES DONDE YA NO SE QUE HACER CON LA VIDAAAAAAA :( #########
+#La distribución es: 
+datos_train <- crm[training_sample, ]
+datos_test  <- crm[-training_sample, ]
+
+crm %>%
+count(mailing_indicator)
+crm_V<-
+  crm%>%
+  filter(mailing_indicator==1)%>%
+  select(-mailing_indicator)
+
+
+crm_T<-
+  crm%>%
+  filter(mailing_indicator==0)%>%
+  select(-mailing_indicator)
+  
 
 
 
