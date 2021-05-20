@@ -256,7 +256,7 @@ kable(crm%>%
         summarise(n =n())%>%
         mutate(share = 100*n/sum(n)), digits = 2)
 
-#La distribución es: 
+#Divimos la base: 
 crm_train <- crm[training_sample, ]
 crm_test  <- crm[-training_sample, ]
   
