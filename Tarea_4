@@ -107,6 +107,29 @@ stargazer(as.data.frame(tabla), type="text", summary=FALSE)
 regress <- balance_regression(crm, treatment="mailing_indicator")
 regress$F_test
 
+Variables desbalanceadas
+-clicks_product_type_201_1m
+-customer_id
+-dollars_season_C
+-orders_3yr
+-orders_attributed_mail_type_C
+-orders_c
+-orders_d_1yr
+-orders_hm
+-orders_online_1yr
+-outcome_spend
+-spend_a_1yr
+-spend_attributed_mail_type_C
+-spend_d_s_1yr
+-spend_instore_p_1yr
+-spend_online_a_1yr
+-spend_online_b_1yr
+-spend_online_b_3yr
+-spend_online_s_1yr
+-spend_period_1b
+-spend_season_C
+-spend_z1
+
 ```
 
 4. Realize un ajuste de False Discovery Rate al 10%. Cuántas variables salen desbalanceadas ahora? 
