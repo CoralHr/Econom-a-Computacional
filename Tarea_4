@@ -103,6 +103,10 @@ cormat <- rquery.cormat(crm, type="flatten", graph=FALSE)
 ```{r{
 tabla <- balance_table(crm, treatment="mailing_indicator")
 stargazer(as.data.frame(tabla), type="text", summary=FALSE)
+
+regress <- balance_regression(crm, treatment="mailing_indicator")
+regress$F_test
+
 ```
 
 4. Realize un ajuste de False Discovery Rate al 10%. Cuántas variables salen desbalanceadas ahora? 
