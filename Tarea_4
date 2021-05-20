@@ -111,6 +111,11 @@ regress$F_test
 
 4. Realize un ajuste de False Discovery Rate al 10%. Cuántas variables salen desbalanceadas ahora? 
 
+```{r}
+which( colnames(crm)=="mailing_indicator")
+fuzzySim::FDR(data = crm, sp.cols = 154, var.cols = 1:156)
+```
+
 
 ### Estimación de impacto de tratamiento (ATE)
 
