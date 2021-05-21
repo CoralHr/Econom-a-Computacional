@@ -159,7 +159,7 @@ table(resultados$sig_fdr)
 ```{r}
 #CON TABLA DE BALANCE ANTERIOR :
 tabla_b<-
-  tabla_b%>%
+  tabla%>%
   arrange(p_value1)%>%
   mutate(ranking =row_number())
 
