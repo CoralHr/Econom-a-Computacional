@@ -264,6 +264,10 @@ crm_test  <- crm[-training_sample, ]
 
 6 (3pts). Estima un Double Debiased LASSO. Asegurate de mostrar el código. (Tip: recuerda que necesitas guardar el LASSO de cada K para poder usarlo en la base de validación)
 
+OJO: Aquí me da un error pero el problema viene desde la base de datos!! porque tengo NA's o 0's 
+
+
+
 ```{r}
 #Preparamos las variables :
 # Matriz de covariates
