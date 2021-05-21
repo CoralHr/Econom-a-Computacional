@@ -264,6 +264,70 @@ crm_test  <- crm[-training_sample, ]
 
 6 (3pts). Estima un Double Debiased LASSO. Asegurate de mostrar el código. (Tip: recuerda que necesitas guardar el LASSO de cada K para poder usarlo en la base de validación)
 
+```{r}
+#Preparamos las variables :
+# Matriz de covariates
+base_training$treat<-NULL
+X<-
+  base_training %>% 
+  ungroup() %>%
+  select(-customer_id,-mailing_indicator)
+X<-sparse.model.matrix(~.+0, data = X)
+
+trat<-base_training$mailing_indicator
+outcome<-base_training$outcome_spend
+View(base_training)
+base_training <-
+  base_training%>%
+  arrange(customer_id)
+
+k<-treatment_assign(data = base_training, 
+                    share_control = 0.2,n_t = 4,  
+                    strata_varlist = "customer_id",
+                    missfits = "global",seed = 1900, 
+                    key = "customer_id")$data
+k<-
+  k%>%
+  mutate(k = treat+1)%>%
+  ungroup()
+
+base_training<-bind_cols(base_training, k%>% select(k))
+k<-k$k
+
+
+#Cross-fitting
+modelo<-map_dfr(1:5,
+                function(a) {
+            treat_fit <-gamlr(x = X[k!=a, , drop= F],
+            y =trat[k!=a],family="binomial")
+                  
+        treat_hat<-as.numeric(predict(treat_fit,
+                  newdata = X[k==a, , drop= F],
+                  type = "response"))
+     
+        
+        monto_fit <-gamlr(x = X[k!=a, , drop= F],
+          y = outcome[k!=a])
+     
+        monto_hat<-as.numeric(predict(monto_fit,
+                    newdata = X[k==a, , drop= F],
+                    type = "response"))
+     treat_resid <- trat[k==a]-treat_hat
+  resid_monto <- outcome[k==a]-monto_hat
+  
+  fits<-bind_cols("treat_hat" = treat_hat,
+                  "monto_hat"= monto_hat,
+                  "resid_treat" = treat_resid,
+                  "resid_monto" = resid_monto)
+  
+  })
+
+View(modelo)
+monto_ret_ate<-lm(resid_monto~resid_treat,
+                  data = modelo) %>%
+  tidy()
+
+```
 
 7 (2pts). Cuál es el impacto de tratamiento promedio? Estimalo de dos maneras: 1) `spend_resid~treat_hat + treat` y 2) `spend~treat_resid`. Sale lo mismo? Justifica tu respuesta
 
