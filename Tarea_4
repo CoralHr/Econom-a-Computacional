@@ -81,6 +81,8 @@ kable_classic_2(full_width = F, html_font = "Cambria", fixed_thead = T)
 No encontramos variables que tengan NA
 
 ###NO SE PORQUE NO ME APARECE NADA EN LA TABLA, PERO CON ESTE CÓDIGO SI, UTILIZANDO EL MISMO FORMATO QUE DANI ###
+### No te aparece nada porque estás tabulando mssng2, que es el el subset de variables con MV positivos...y como no hay ninguna, pues no aparece nada.
+#por otra parte, no creo que sea necesario presentar la tabla de 156 variables, que muestran que todas tienen 0 NAs, podemos solo comentarlo.
 ```{r}
 tabla1<-apply(is.na(crm), 2, mean)
 library(kableExtra)
