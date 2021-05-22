@@ -154,7 +154,9 @@ stargazer(as.data.frame(efe),type="text",summary=FALSE, font.size = "small")
 -spend_season_C
 ```
 
+El valor-p de la pryeba F es suficientemente grande, por lo que no se rechaza la hipótesis de que las covariables no explican la Pr de pertenecer al tratamiento, lo cual nos da evidencia de que la asignación es aleatoria.
 
+No obstante, con una significancia de 5%, salen 24 variables desbalanceadas, es decir, el 16% de las variables, lo cual podría indicar que la asignación del tratamiento no fue completamente aleatoria.
 
 4. Realize un ajuste de False Discovery Rate al 10%. Cuántas variables salen desbalanceadas ahora? 
 
