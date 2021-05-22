@@ -118,14 +118,18 @@ Se eliminaron las siguientes variables por multicolinealidad: acquisition_months
 
 3 (2 pts). Corroba que la asignación tratamiento fue aleatoria mediante revisión del balance. Realiza las pruebas balance T y F. Cuántas variables salen desbalanceadas? Que muestra esto sobre la asignación de tratamiento?
 ```{r}
-# Generamos la tabla de balance para todas las x's (sin customer_id ni outcome_spend)
+# Generamos la tabla de balance para todas las x's (sin customer_id ni outcome_spend) e identificamos las variables desbalanceadas (para las que se rechaza la prueba T)
+
 tabla <- balance_table(select(crm,-customer_id,-outcome_spend), treatment="mailing_indicator")
 desbalance<-subset(tabla,p_value1<0.05)
-stargazer(as.data.frame(desbalance), type="text", summary=FALSE)
 
+kbl(desbalance, booktabs = T, caption = "<center><strong>Variables desbalanceadas</strong></center>") %>% kable_classic_2(full_width = F, html_font = "Cambria", fixed_thead = T)
+
+# Prueba F
 regress <- balance_regression(select(crm,-customer_id,-outcome_spend), treatment="mailing_indicator")
 efe<-regress$F_test
-stargazer(as.data.frame(efe),type="text",summary=FALSE, font.size = "small")
+
+kbl(efe, booktabs = T, caption = "<center><strong>Prueba F</strong></center>") %>% kable_classic_2(full_width = F, html_font = "Cambria", fixed_thead = T)
 
 ### Las variables que salen desbalanceadas son:
 -clicks_product_type_201_1m
@@ -154,7 +158,7 @@ stargazer(as.data.frame(efe),type="text",summary=FALSE, font.size = "small")
 -spend_season_C
 ```
 
-El valor-p de la pryeba F es suficientemente grande, por lo que no se rechaza la hipótesis de que las covariables no explican la Pr de pertenecer al tratamiento, lo cual nos da evidencia de que la asignación es aleatoria.
+El valor-p de la prueba F es suficientemente grande, por lo que no se rechaza la hipótesis de que las covariables no explican la Pr de pertenecer al tratamiento, lo cual nos da evidencia de que la asignación es aleatoria.
 
 No obstante, con una significancia de 5%, salen 24 variables desbalanceadas, es decir, el 16% de las variables, lo cual podría indicar que la asignación del tratamiento no fue completamente aleatoria.
 
@@ -162,11 +166,11 @@ No obstante, con una significancia de 5%, salen 24 variables desbalanceadas, es 
 
 
 ```{r}
-#CON REGRESIÓN (NO CREO QUE SEA LA CORRECTA)
-attach(crm)
-fit <-lm(outcome_spend~., data = crm)
-library(broom)
+# Regresión
+fit <-lm(outcome_spend~.-customer_id-training_sample, data = crm)
 
+# FDR
+library(broom)
 resultados<-tidy(fit)
 
 resultados<-
@@ -178,8 +182,19 @@ resultados<-
   resultados%>%
   mutate(corte_fdr = 0.1*ranking/nrow(resultados),sig_fdr =if_else(p.value<=corte_fdr,'Significativa','No significativa'))
 
-table(resultados$sig_fdr)
+# Identificamos cúantas variables significativas están desbalanceadas
+
+resultados<-subset(resultados,sig_fdr=="Significativa")
+
+var_desbal<-desbalance$variables1
+var_signif<-resultados$term
+new_desbalance<-as.data.frame(intersect(var_desbal,var_signif))
+
+kbl(new_desbalance, booktabs = T, caption = "<center><strong>Variables significativas desbalanceadas</strong></center>") %>% kable_classic_2(full_width = F, html_font = "Cambria", fixed_thead = T)
+
 ```
+Hay 12 variables desbalanceadas.
+
 
 ```{r}
 #CON TABLA DE BALANCE ANTERIOR :
