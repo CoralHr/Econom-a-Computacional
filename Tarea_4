@@ -234,7 +234,7 @@ itt3<- itt3[1:2,]
 kbl(itt3, booktabs = T, caption = "<center><strong>Impacto con variables significativas FDR</strong></center>") %>% kable_classic_2(full_width = F, html_font = "Cambria", fixed_thead = T)
 
 ```
-
+El impacto de enviar el catálogo vía email es mayor cuando no se agregan controles pero, dado que salieron desbalanceadas algunas variables, se agregan a la regresión para balancearlas. Los resultados de las dos estimaciones de robustez son muy parecidos (los coeficientes difieren por 0.02) pues la estimación que agrega las variables significativas en el FDR ya controla por las variables desbalanceadas que son relevantes. 
 #### Estimación de efectos heterogeneos
 
 Usaremos el training sample para estimar el Conditional Average Treatment Effect de enviar el catalogo sobre el gasto en dólares. Estimaremos dos tipos de modelos (si agregan otro es bienvenido): 
