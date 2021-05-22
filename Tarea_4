@@ -196,38 +196,6 @@ kbl(new_desbalance, booktabs = T, caption = "<center><strong>Variables significa
 Hay 12 variables desbalanceadas.
 
 
-```{r}
-#CON TABLA DE BALANCE ANTERIOR :
-tabla_b<-
-  tabla%>%
-  arrange(p_value1)%>%
-  mutate(ranking =row_number())
-
-tabla_b<-
-  tabla_b%>%
-  mutate(corte_fdr = 0.1*ranking/nrow(tabla_b),
-  sig_fdr=if_else(p_value1<=corte_fdr,'Significativa','No significativa'))
-
-table(tabla_b$sig_fdr)
-
-
-```
-
-
-Ahora salen solo 2 variables desbalanceadas :
-outcome_spend
-spend_online_b_3yr
-
-```{r}
-tabla_b %>%
-  kbl(booktabs = T,
-      caption = "Tabla 1: Prueba de Balance (T)")%>%
-  kable_material(c("striped", "hover"))
-
-
-```
-
-
 ### Estimación de impacto de tratamiento (ATE)
 
 5 (2pts). Estima el impacto promedio de enviar el catalogo vía email. Estima el impacto sin controles y luego agregar dos estimaciones de robustez: 1) Agregando variables que salieron significativas y 2) Agregando variables que salieron significativas con el FDR. Interpreta los resultados 
