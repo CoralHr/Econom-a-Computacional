@@ -117,35 +117,41 @@ crm <- select(crm, -acquisition_months_since,-in_database_months,-emails_days_2y
 Se eliminaron las siguientes variables por multicolinealidad: acquisition_months_since,in_database_months, emails_days_2yr, customer_type_3, emailview_6m, spend_online_attributed_target
 
 3 (2 pts). Corroba que la asignación tratamiento fue aleatoria mediante revisión del balance. Realiza las pruebas balance T y F. Cuántas variables salen desbalanceadas? Que muestra esto sobre la asignación de tratamiento?
-```{r{
-tabla <- balance_table(crm, treatment="mailing_indicator")
-stargazer(as.data.frame(tabla), type="text", summary=FALSE)
+```{r}
+# Generamos la tabla de balance para todas las x's (sin customer_id ni outcome_spend)
+tabla <- balance_table(select(crm,-customer_id,-outcome_spend), treatment="mailing_indicator")
+desbalance<-subset(tabla,p_value1<0.05)
+stargazer(as.data.frame(desbalance), type="text", summary=FALSE)
 
-regress <- balance_regression(crm, treatment="mailing_indicator")
-regress$F_test
+regress <- balance_regression(select(crm,-customer_id,-outcome_spend), treatment="mailing_indicator")
+efe<-regress$F_test
+stargazer(as.data.frame(efe),type="text",summary=FALSE, font.size = "small")
 
-Variables desbalanceadas
+### Las variables que salen desbalanceadas son:
 -clicks_product_type_201_1m
+-customer_type_L
 -dollars_season_C
 -orders_3yr
 -orders_attributed_mail_type_C
 -orders_c
 -orders_d_1yr
--orders_hm
 -orders_online_1yr
--outcome_spend
+-orders_online_s_1yr
+-orders_season_E
+-orders_total
 -spend_a_1yr
 -spend_attributed_mail_type_C
 -spend_d_s_1yr
 -spend_instore_p_1yr
+-spend_notz_1yr
 -spend_online_a_1yr
+-spend_online_a_3yr
 -spend_online_b_1yr
 -spend_online_b_3yr
+-spend_online_g_1yr
 -spend_online_s_1yr
 -spend_period_1b
 -spend_season_C
--spend_z1
-
 ```
 
 
