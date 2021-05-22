@@ -95,12 +95,26 @@ kable_classic_2(full_width = F, html_font = "Cambria", fixed_thead = T)
 
 2. Muestra la matriz de correlación entre variables. Muestra los pares de variables que tienen más de 95% de correlación. Remueve una de cada par multicolineal. 
 
-```{r}
-source("http://www.sthda.com/upload/rquery_cormat.r")
-cor(crm)
-cormat <- rquery.cormat(crm, type="flatten", graph=FALSE)
-```
+# Verificamos que todas las variables sean numéricas
+tipo<-as.data.frame(sapply(crm, class))
 
+# Calculamos la matriz de correlaciones
+correlaciones <- cor(crm %>% select(-customer_id,-training_sample))
+
+# Identificamos las variables con las correlaciones más altas y las mostramos
+ordenado<-as.data.frame(as.table(correlaciones))
+ordenado<-subset(ordenado,abs(Freq)>0.95)
+ordenado<-subset(ordenado,Var1!=Var2)
+colnames(ordenado) <- c("Var1","Var2","corr")
+
+kbl(ordenado, booktabs = T, caption = "<center><strong>Pares con correlación>95%</strong></center>") %>% kable_classic_2(full_width = F, html_font = "Cambria", fixed_thead = T)
+
+# Eliminamos una variable de cada par multicolineal
+
+crm2 <- select(crm, -acquisition_months_since,-in_database_months,-emails_days_2yr,-customer_type_3,-emailview_6m,-spend_online_attributed_target)
+
+```
+Se eliminaron las siguientes variables por multicolinealidad: acquisition_months_since,in_database_months, emails_days_2yr, customer_type_3, emailview_6m, spend_online_attributed_target
 
 3 (2 pts). Corroba que la asignación tratamiento fue aleatoria mediante revisión del balance. Realiza las pruebas balance T y F. Cuántas variables salen desbalanceadas? Que muestra esto sobre la asignación de tratamiento?
 ```{r{
