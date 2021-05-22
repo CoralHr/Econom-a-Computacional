@@ -218,7 +218,7 @@ itt2<-impact_eval(data = crm,endogenous_vars =c("outcome_spend"),treatment = "ma
 itt2<-as.data.frame(itt2)
 itt2<- itt2[1:2,]
 
-kbl(itt2, booktabs = T, caption = "<center><strong>Impacto sin controles</strong></center>") %>% kable_classic_2(full_width = F, html_font = "Cambria", fixed_thead = T)
+kbl(itt2, booktabs = T, caption = "<center><strong>Impacto con variables significativas</strong></center>") %>% kable_classic_2(full_width = F, html_font = "Cambria", fixed_thead = T)
 
 ```
 ```{r}
@@ -231,7 +231,7 @@ itt3<-impact_eval(data = crm,endogenous_vars =c("outcome_spend"),treatment = "ma
 itt3<-as.data.frame(itt3)
 itt3<- itt3[1:2,]
 
-kbl(itt3, booktabs = T, caption = "<center><strong>Impacto sin controles</strong></center>") %>% kable_classic_2(full_width = F, html_font = "Cambria", fixed_thead = T)
+kbl(itt3, booktabs = T, caption = "<center><strong>Impacto con variables significativas FDR</strong></center>") %>% kable_classic_2(full_width = F, html_font = "Cambria", fixed_thead = T)
 
 ```
 
