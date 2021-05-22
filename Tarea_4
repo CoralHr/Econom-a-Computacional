@@ -253,12 +253,9 @@ kable(crm%>%
         summarise(n =n())%>%
         mutate(share = 100*n/sum(n)), digits = 2)
 
-#Dividimos la base: 
-crm_train <- crm[training_sample, ]
-crm_test  <- crm[-training_sample, ]
 
 ##### A mí me funcionó con este otro código, lo dejo por aquí ####
-#Dividimos la base: 
+#Dividimos la base:  ERES LA MEJOOOOR MARI <3 
 
 crm_train <-subset(crm, training_sample==1)
 crm_test  <- subset(crm, training_sample==0)  
@@ -267,28 +264,26 @@ crm_test  <- subset(crm, training_sample==0)
 
 6 (3pts). Estima un Double Debiased LASSO. Asegurate de mostrar el código. (Tip: recuerda que necesitas guardar el LASSO de cada K para poder usarlo en la base de validación)
 
-OJO: Aquí me da un error pero el problema viene desde la base de datos!! porque tengo NA's o 0's 
-
 
 
 ```{r}
 #Preparamos las variables :
 # Matriz de covariates
-base_training$treat<-NULL
+crm_train$treat<-NULL
 X<-
-  base_training %>% 
+  crm_train%>% 
   ungroup() %>%
   select(-customer_id,-mailing_indicator)
 X<-sparse.model.matrix(~.+0, data = X)
 
-trat<-base_training$mailing_indicator
-outcome<-base_training$outcome_spend
-View(base_training)
-base_training <-
-  base_training%>%
+trat<-crm_train$mailing_indicator
+outcome<-crm_taing$outcome_spend
+
+crm_train <-
+  crm_train%>%
   arrange(customer_id)
 
-k<-treatment_assign(data = base_training, 
+k<-treatment_assign(data = crm_train, 
                     share_control = 0.2,n_t = 4,  
                     strata_varlist = "customer_id",
                     missfits = "global",seed = 1900, 
@@ -298,7 +293,7 @@ k<-
   mutate(k = treat+1)%>%
   ungroup()
 
-base_training<-bind_cols(base_training, k%>% select(k))
+base_training<-bind_cols(crm_train, k%>% select(k))
 k<-k$k
 
 
