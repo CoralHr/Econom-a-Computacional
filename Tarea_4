@@ -111,7 +111,7 @@ kbl(ordenado, booktabs = T, caption = "<center><strong>Pares con correlación>95
 
 # Eliminamos una variable de cada par multicolineal
 
-crm2 <- select(crm, -acquisition_months_since,-in_database_months,-emails_days_2yr,-customer_type_3,-emailview_6m,-spend_online_attributed_target)
+crm <- select(crm, -acquisition_months_since,-in_database_months,-emails_days_2yr,-customer_type_3,-emailview_6m,-spend_online_attributed_target)
 
 ```
 Se eliminaron las siguientes variables por multicolinealidad: acquisition_months_since,in_database_months, emails_days_2yr, customer_type_3, emailview_6m, spend_online_attributed_target
