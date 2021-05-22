@@ -201,48 +201,37 @@ Hay 12 variables desbalanceadas.
 5 (2pts). Estima el impacto promedio de enviar el catalogo vía email. Estima el impacto sin controles y luego agregar dos estimaciones de robustez: 1) Agregando variables que salieron significativas y 2) Agregando variables que salieron significativas con el FDR. Interpreta los resultados 
 
 ```{r}
-#Estimación del impacto promedio de enviar el catálogo vía email sobre el gasto incremental (SIN CONTROLES)
+# Estimación del impacto promedio de enviar el catálogo vía email sobre el gasto incremental (SIN CONTROLES)
 
 itt1<-impact_eval(data = crm,endogenous_vars =c("outcome_spend"),treatment = "mailing_indicator")
+itt1<-as.data.frame(itt1)
 
-itt1<-as.data.frame(itt1$outcome_spend)
-View(itt1)
-
-itt1$nombre<-c("Control","Tratamiento")
-library(ggplot2)
-ggplot2::ggplot(data=itt1,aes(x=nombre, y=estimate, fill=rownames(itt1)))+geom_bar(stat="identity")+guides(fill=FALSE)+labs(x="Asignación", y="Gasto incremental")+geom_text(aes(label=round(estimate,digits=2)))
+kbl(itt1, booktabs = T, caption = "<center><strong>Impacto sin controles</strong></center>") %>% kable_classic_2(full_width = F, html_font = "Cambria", fixed_thead = T)
 
 ```
 ```{r}
-#Estimación con variables significativas
+# Estimación con variables significativas (desbalanceadas)
 
 itt2<-impact_eval(data = crm,endogenous_vars =c("outcome_spend"),treatment = "mailing_indicator",
-                  control_vars =c("clicks_product_type_201_1m", "dollars_season_C","orders_3yr", "orders_attributed_mail_type_C", "orders_c", "orders_d_1yr", "orders_hm", "orders_online_1yr", "spend_a_1yr", "spend_attributed_mail_type_C", "spend_d_s_1yr", "spend_instore_p_1yr", "spend_online_a_1yr", "spend_online_b_1yr", "spend_online_b_3yr", "spend_online_s_1yr","spend_period_1b", "spend_season_C", "spend_z1"))
+                  control_vars = var_desbal) 
 
-itt2<-as.data.frame(itt2$outcome_spend)
-View(itt2)
+itt2<-as.data.frame(itt2)
 itt2<- itt2[1:2,]
-View(itt2)
-itt2$nombre<-c("Control","Tratamiento")
 
-ggplot2::ggplot(data=itt2,aes(x=nombre, y=estimate, fill=rownames(itt2)))+geom_bar(stat="identity")+guides(fill=FALSE)+labs(x="Asignación", y="Gasto incremental")+geom_text(aes(label=round(estimate,digits=2)))
+kbl(itt2, booktabs = T, caption = "<center><strong>Impacto sin controles</strong></center>") %>% kable_classic_2(full_width = F, html_font = "Cambria", fixed_thead = T)
 
 ```
 ```{r}
-#Estimación con variables significativas con el FDR: 
-
+# Estimación con variables significativas en el FDR: 
+colnames(new_desbalance)<-c("variable)
+desbalance_FDR<-new_desbalance$variable
 itt3<-impact_eval(data = crm,endogenous_vars =c("outcome_spend"),treatment = "mailing_indicator",
-                  control_vars =c("spend_online_b_3yr"))
+                  control_vars = desbalance_FDR)
 
-itt3<-as.data.frame(itt3$outcome_spend)
-View(itt3)
+itt3<-as.data.frame(itt3)
 itt3<- itt3[1:2,]
-View(itt3)
-itt3$nombre<-c("Control","Tratamiento")
 
-ggplot2::ggplot(data=itt3,aes(x=nombre, y=estimate, fill=rownames(itt3)))+geom_bar(stat="identity")+guides(fill=FALSE)+labs(x="Asignación", y="Gasto incremental")+geom_text(aes(label=round(estimate,digits=2)))
-
-
+kbl(itt3, booktabs = T, caption = "<center><strong>Impacto sin controles</strong></center>") %>% kable_classic_2(full_width = F, html_font = "Cambria", fixed_thead = T)
 
 ```
 
