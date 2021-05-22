@@ -256,6 +256,12 @@ kable(crm%>%
 #Dividimos la base: 
 crm_train <- crm[training_sample, ]
 crm_test  <- crm[-training_sample, ]
+
+##### A mí me funcionó con este otro código, lo dejo por aquí ####
+#Dividimos la base: 
+
+crm_train <-subset(crm, training_sample==1)
+crm_test  <- subset(crm, training_sample==0)  
   
 ####Double Debiased LASSO
 
