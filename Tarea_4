@@ -48,6 +48,7 @@ library(RCT)
 library(lfe)
 library(stargazer)
 library(knitr)
+library(kableExtra)
 ```
 
 ```{r, cache=TRUE}
