@@ -334,19 +334,21 @@ View(modelo)
 7 (2pts). Cuál es el impacto de tratamiento promedio? Estimalo de dos maneras: 1) `spend_resid~treat_hat + treat` y 2) `spend~treat_resid`. Sale lo mismo? Justifica tu respuesta
 
 ```{r}
-#Primera forma
-attach(modelo)
+# Primera forma
+spend_ate1<-lm(resid_spend~treat_hat+ trat,data=modelo) 
 
-spend_ate1<-lm(resid_spend~treat_hat+ b) 
+# Segunda
+spend_ate2<-lm(outcome~resid_treat, data=modelo) 
+
+# Tercera
+spend_ate3<-lm(resid_spend~resid_treat, data=modelo) 
 
 
-#Segunda
-spend_ate2<-lm(resid_spend~resid_treat) 
-
-
-stargazer(spend_ate1,spend_ate2,type="text")
+stargazer(spend_ate1,spend_ate2,spend_ate3,type="text")
 ```
-
+La estimación correcta es `spend_resid~resid_treat`, ya que en dicha especificación, tanto la Y como el tratamiento se encuentran "ortogonalizadas", es decir, libres del efecto de otras variables, por lo que se puede encontrar un impacto causal.
+En la especificación 2, solo el tratamiento está ortogonalizado, por lo que podría haber otras X's que tengan impacto sobre Y.
+En la especificación 1, la Y se encuentra ortogonalizada y se controla de alguna forma por el impacto de las X's sobre T (treat_hat) y por T (que se espera que aporte la parte que corresponde al tratamiento), por lo tanto, esta estimación es más parecida a la correcta.
 8 (3pts). Cuáles son las variables más importantes para las nuisance functions $T_i = g(X_i)+v_i$ y $y_i=m(X_i)+\epsilon_i$? (Tip: toma las variables que tengan $\beta \neq 0$ en cada $k$ y haz un `inner_join`. De ahí muestra el promedio de los coeficientes) Interpreta la función $g(X_i)$, porque sale así?
 
 
