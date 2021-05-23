@@ -282,8 +282,7 @@ X<-
   select(-customer_id,-mailing_indicator,-outcome_spend)
 X<-sparse.model.matrix(~.+0, data = X)
 dim(X)
-trat<-crm_train$mailing_indicator
-outcome<-crm_train$outcome_spend
+
 
 k<-treatment_assign(data = crm_train, 
                     share_control = 0.2,n_t = 4,  
@@ -298,6 +297,8 @@ k<-
   ungroup()
 crm_train<-bind_cols(crm_train, k%>% select(k))
 k<-k$k
+trat<-crm_train$mailing_indicator
+outcome<-crm_train$outcome_spend
 
 
 #Cross-fitting
