@@ -279,7 +279,7 @@ crm_train$training_sample<-NULL
 X<-
   crm_train %>% 
   ungroup() %>%
-  select(-customer_id,-mailing_indicator,outcome_spend)
+  select(-customer_id,-mailing_indicator,-outcome_spend)
 X<-sparse.model.matrix(~.+0, data = X)
 dim(X)
 trat<-crm_train$mailing_indicator
