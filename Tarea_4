@@ -270,7 +270,7 @@ crm_test  <- subset(crm, training_sample==0)
 ```{r}
 #Preparamos las variables :
 # Matriz de covariates
-crm_train$treat<-NULL
+crm_train$training_sample<-NULL
 X<-
   crm_train %>% 
   ungroup() %>%
@@ -310,19 +310,19 @@ modelo<-map_dfr(1:5,
                   type = "response"))
      
         
-        monto_fit <-gamlr(x = X[k!=a, , drop= F],
+        outcome_fit <-gamlr(x = X[k!=a, , drop= F],
           y = outcome[k!=a])
      
-        monto_hat<-as.numeric(predict(monto_fit,
+        outcome_hat<-as.numeric(predict(outcome_fit,
                     newdata = X[k==a, , drop= F],
                     type = "response"))
      treat_resid <- trat[k==a]-treat_hat
-  resid_monto <- outcome[k==a]-monto_hat
+  resid_outcome <- outcome[k==a]-outcome_hat
   
   fits<-bind_cols("treat_hat" = treat_hat,
-                  "spend_hat"= monto_hat,
+                  "spend_hat"= outcome_hat,
                   "resid_treat" = treat_resid,
-                  "resid_spend" = resid_monto)
+                  "resid_spend" = resid_outcome)
   
   })
 
