@@ -427,6 +427,33 @@ Solo el intercepto sale relevante para g(x), mientras que para m(x) hay 39 varia
 
 9 (3pts). Ahora corre un DDML LASSO para encontrar los efectos a nivel cliente (Tip: interactúa todas las variables con `treat_resid`. Muestra el código. Qué varaibles salen significativas?
 
+```{r,warning=FALSE}
+
+## Generamos una matriz X sparse,que incluye resid_treat y las interacciones de x con resid_treat
+
+# Generamos X nuevamente
+crm_train <- subset(crm, training_sample==1)
+X1<-crm_train%>%ungroup()%>%select(-customer_id,-mailing_indicator,-outcome_spend)
+# Agregamos resid_treat
+
+T_resid<-modelo$resid_treat
+X1$resid_treat<-with(X1,T_resid)
+
+# Matriz sparse con interacciones
+X1<-sparse.model.matrix(~.+0+resid_treat*., data = X1)
+
+## Generamos Y
+Y<-modelo$resid_spend
+
+## LASSO 
+lasso_hte<-gamlr(x = X1, y =Y)
+       
+coef_lasso_hte<-as.matrix(coef(lasso_hte))
+coef_lasso_hte<-tibble(variable =rownames(coef_lasso_hte),coeficiente = coef_lasso_hte[,1])
+coef_lasso_hte<-coef_lasso_hte%>% filter(coeficiente!=0)
+
+```
+Salen 60 interacciones significativas.
 
 10 (2 pts). Predice el CATE en la base de entrenamiento y en la base de validación. Como se ve la distribución del impacto de tratamiento en ambas? 
 
