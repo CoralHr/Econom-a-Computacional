@@ -605,7 +605,10 @@ average_treatment_effect(
 ATE=2.7610950
 
 13. Haz un scatter plot de las predicciones de ambos modelos? Hay alguna relación?
+```{r}
+effects <- predict(cf)$predictions
 
+```
 
 14 (4pts). Evalúa el poder predictivo de cada modelo (OOS). Esto se hace por modelo: Divide la muestra en 10 partes con base en el score de ddml. Para cada parte, estima el impacto de tratamiento vía una regresión y saca el promedio del score. Valida si para los grupos que dice el score el impacto será más grande, el coeficiente de la regresión es. Cómo se ven los modelos? Cuál parece ser mejor?
 
