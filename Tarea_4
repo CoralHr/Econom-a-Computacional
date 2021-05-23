@@ -335,6 +335,19 @@ View(modelo)
 
 7 (2pts). Cuál es el impacto de tratamiento promedio? Estimalo de dos maneras: 1) `spend_resid~treat_hat + treat` y 2) `spend~treat_resid`. Sale lo mismo? Justifica tu respuesta
 
+```{r}
+#Primera forma
+attach(modelo)
+
+spend_ate1<-lm(resid_spend~treat_hat+ b) 
+
+
+#Segunda
+spend_ate2<-lm(resid_spend~resid_treat) 
+
+
+stargazer(spend_ate1,spend_ate2,type="text")
+```
 
 8 (3pts). Cuáles son las variables más importantes para las nuisance functions $T_i = g(X_i)+v_i$ y $y_i=m(X_i)+\epsilon_i$? (Tip: toma las variables que tengan $\beta \neq 0$ en cada $k$ y haz un `inner_join`. De ahí muestra el promedio de los coeficientes) Interpreta la función $g(X_i)$, porque sale así?
 
