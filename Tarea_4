@@ -351,8 +351,80 @@ stargazer(spend_ate1,spend_ate2,spend_ate3,type="text")
 La estimación correcta es `spend_resid~resid_treat`, ya que en dicha especificación, tanto la Y como el tratamiento se encuentran "ortogonalizadas", es decir, libres del efecto de otras variables, por lo que se puede encontrar un impacto causal.
 En la especificación 2, solo el tratamiento está ortogonalizado, por lo que podría haber otras X's que tengan impacto sobre Y.
 En la especificación 1, la Y se encuentra ortogonalizada y se controla de alguna forma por el impacto de las X's sobre T (treat_hat) y por T (que se espera que aporte la parte que corresponde al tratamiento), por lo tanto, esta estimación es más parecida a la correcta.
+
 8 (3pts). Cuáles son las variables más importantes para las nuisance functions $T_i = g(X_i)+v_i$ y $y_i=m(X_i)+\epsilon_i$? (Tip: toma las variables que tengan $\beta \neq 0$ en cada $k$ y haz un `inner_join`. De ahí muestra el promedio de los coeficientes) Interpreta la función $g(X_i)$, porque sale así?
 
+```{r,warning=FALSE}
+
+# g
+fit_treat<-map(1:5,
+                function(a) {
+            treat_fit <-gamlr(x = X[k!=a, , drop=F],
+            y =trat[k!=a],family="binomial")
+ })
+
+coef_g1<-as.matrix(coef(fit_treat[[1]]))
+coef_g1<-tibble(variable =rownames(coef_g1),coeficiente = coef_g1[,1])
+coef_g1<-coef_g1%>% filter(coeficiente!=0)
+
+coef_g2<-as.matrix(coef(fit_treat[[2]]))
+coef_g2<-tibble(variable =rownames(coef_g2),coeficiente = coef_g2[,1])
+coef_g2<-coef_g2%>% filter(coeficiente!=0)
+
+coef_g3<-as.matrix(coef(fit_treat[[3]]))
+coef_g3<-tibble(variable =rownames(coef_g3),coeficiente = coef_g3[,1])
+coef_g3<-coef_g3%>% filter(coeficiente!=0)
+
+coef_g4<-as.matrix(coef(fit_treat[[4]]))
+coef_g4<-tibble(variable =rownames(coef_g4),coeficiente = coef_g4[,1])
+coef_g4<-coef_g4%>% filter(coeficiente!=0)
+
+coef_g5<-as.matrix(coef(fit_treat[[5]]))
+coef_g5<-tibble(variable =rownames(coef_g5),coeficiente = coef_g5[,1])
+coef_g5<-coef_g5%>% filter(coeficiente!=0)
+ 
+
+var_relevantes_g<-inner_join(coef_g1,coef_g2,by="variable") %>% inner_join(.,coef_g3,by="variable")%>% inner_join(.,coef_g4,by="variable")%>% inner_join(.,coef_g5,by="variable")
+
+colnames(var_relevantes_g) <- c("Variable","F1","F2","F3","F4","F5")               
+var_relevantes_g$promedio <- with(var_relevantes_g, (F1+F2+F3+F4+F5)/5 )
+
+# m
+fit_outcome<-map(1:5,
+                function(a) {
+            outcome_fit <-gamlr(x = X[k!=a, , drop= F],
+            y = outcome[k!=a])
+ })
+
+coef_m1<-as.matrix(coef(fit_outcome[[1]]))
+coef_m1<-tibble(variable =rownames(coef_m1),coeficiente = coef_m1[,1])
+coef_m1<-coef_m1%>% filter(coeficiente!=0)
+
+coef_m2<-as.matrix(coef(fit_outcome[[2]]))
+coef_m2<-tibble(variable =rownames(coef_m2),coeficiente = coef_m2[,1])
+coef_m2<-coef_m2%>% filter(coeficiente!=0)
+
+coef_m3<-as.matrix(coef(fit_outcome[[3]]))
+coef_m3<-tibble(variable =rownames(coef_m3),coeficiente = coef_m3[,1])
+coef_m3<-coef_m3%>% filter(coeficiente!=0)
+
+coef_m4<-as.matrix(coef(fit_outcome[[4]]))
+coef_m4<-tibble(variable =rownames(coef_m4),coeficiente = coef_m4[,1])
+coef_m4<-coef_m4%>% filter(coeficiente!=0)
+
+coef_m5<-as.matrix(coef(fit_outcome[[5]]))
+coef_m5<-tibble(variable =rownames(coef_m5),coeficiente = coef_m5[,1])
+coef_m5<-coef_m5%>% filter(coeficiente!=0)
+
+
+var_relevantes_m<-inner_join(coef_m1,coef_m2,by="variable") %>% inner_join(.,coef_m3,by="variable")%>% inner_join(.,coef_m4,by="variable")%>% inner_join(.,coef_m5,by="variable")
+
+colnames(var_relevantes_m) <- c("Variable","F1","F2","F3","F4","F5")               
+var_relevantes_m$promedio <- with(var_relevantes_m, (F1+F2+F3+F4+F5)/5 )      
+  
+```
+Solo el intercepto sale relevante para g(x), mientras que para m(x) hay 39 variables relevantes (incluyendo el intercepto).
+La 
 
 9 (3pts). Ahora corre un DDML LASSO para encontrar los efectos a nivel cliente (Tip: interactúa todas las variables con `treat_resid`. Muestra el código. Qué varaibles salen significativas?
 
