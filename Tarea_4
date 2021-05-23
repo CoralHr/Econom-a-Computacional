@@ -423,8 +423,7 @@ colnames(var_relevantes_m) <- c("Variable","F1","F2","F3","F4","F5")
 var_relevantes_m$promedio <- with(var_relevantes_m, (F1+F2+F3+F4+F5)/5 )      
   
 ```
-Solo el intercepto sale relevante para g(x), mientras que para m(x) hay 39 variables relevantes (incluyendo el intercepto).
-La 
+Solo el intercepto sale relevante para g(x), mientras que para m(x) hay 39 variables relevantes (incluyendo el intercepto). Por lo tanto, parece que el tratamiento es ortogonal a las X's.
 
 9 (3pts). Ahora corre un DDML LASSO para encontrar los efectos a nivel cliente (Tip: interactúa todas las variables con `treat_resid`. Muestra el código. Qué varaibles salen significativas?
 
