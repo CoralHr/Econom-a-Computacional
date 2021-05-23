@@ -457,6 +457,110 @@ Salen 60 interacciones significativas.
 
 10 (2 pts). Predice el CATE en la base de entrenamiento y en la base de validación. Como se ve la distribución del impacto de tratamiento en ambas? 
 
+```{r,warning=FALSE}
+
+## En la base de entrenamiento
+pred_train<-as.numeric(predict(lasso_hte, newdata=X1, type="response"))
+pred<-as.data.frame(pred_train)
+colnames(pred)<-"Impacto"
+
+
+## En la base de validación
+
+# Generamos matrices
+
+crm_test$training_sample<-NULL
+
+Xv<-crm_test%>%ungroup()%>%select(-customer_id,-mailing_indicator,-outcome_spend)
+Xv<-sparse.model.matrix(~.+0, data = Xv)
+
+tratv<-crm_test$mailing_indicator
+outcomev<-crm_test$outcome_spend
+
+# Predecimos scores de g y m en la base de validación
+   # g
+pred_g1<-as.numeric(predict(fit_treat[[1]], newdata=Xv, type="response"))
+pred_g1<-as.data.frame(pred_g1)
+
+pred_g2<-as.numeric(predict(fit_treat[[2]], newdata=Xv, type="response"))
+pred_g2<-as.data.frame(pred_g2)
+
+pred_g3<-as.numeric(predict(fit_treat[[3]], newdata=Xv, type="response"))
+pred_g3<-as.data.frame(pred_g3)
+
+pred_g4<-as.numeric(predict(fit_treat[[4]], newdata=Xv, type="response"))
+pred_g4<-as.data.frame(pred_g4)
+
+pred_g5<-as.numeric(predict(fit_treat[[5]], newdata=Xv, type="response"))
+pred_g5<-as.data.frame(pred_g5)
+
+
+treat_hatv<-cbind.data.frame(pred_g1,pred_g2,pred_g3,pred_g4,pred_g5)
+treat_hatv$promedio<-with(treat_hatv,(pred_g1+pred_g2+pred_g3+pred_g4+pred_g5)/5)
+treat_residv <- as.data.frame(tratv-treat_hatv$promedio)
+colnames(treat_residv)<-"treat_residv"
+  # m
+
+pred_m1<-as.numeric(predict(fit_outcome[[1]], newdata=Xv, type="response"))
+pred_m1<-as.data.frame(pred_m1)
+
+pred_m2<-as.numeric(predict(fit_outcome[[2]], newdata=Xv, type="response"))
+pred_m2<-as.data.frame(pred_m2)
+
+pred_m3<-as.numeric(predict(fit_outcome[[3]], newdata=Xv, type="response"))
+pred_m3<-as.data.frame(pred_m3)
+
+pred_m4<-as.numeric(predict(fit_outcome[[4]], newdata=Xv, type="response"))
+pred_m4<-as.data.frame(pred_m4)
+
+pred_m5<-as.numeric(predict(fit_outcome[[5]], newdata=Xv, type="response"))
+pred_m5<-as.data.frame(pred_m5)
+
+
+outcome_hatv<-cbind.data.frame(pred_m1,pred_m2,pred_m3,pred_m4,pred_m5)
+outcome_hatv$promedio<-with(outcome_hatv,(pred_m1+pred_m2+pred_m3+pred_m4+pred_m5)/5)
+spend_residv <- as.data.frame(outcomev-outcome_hatv$promedio)
+colnames(spend_residv)<-"spend_residv"
+
+## Generamos una matriz X sparse,que incluye treat_residv y las interacciones de x treat_residv
+
+# Generamos X nuevamente
+crm_test <- subset(crm, training_sample==0)
+Xlasso<-crm_test%>%ungroup()%>%select(-customer_id,-mailing_indicator,-outcome_spend)
+
+# Agregamos resid_treatv
+
+Xlasso$resid_treatv<-with(Xlasso,treat_residv$treat_residv)
+
+# Matriz sparse con interacciones
+Xlasso<-sparse.model.matrix(~.+0+resid_treatv*., data = Xlasso)
+
+# Generamos Y
+Yv<-spend_residv$spend_residv
+
+## LASSO 
+lasso_htev<-gamlr(x = Xlasso, y =Yv)
+
+pred_test<-as.numeric(predict(lasso_htev, newdata=Xlasso, type="response"))
+predv<-as.data.frame(pred_test)
+colnames(predv)<-"Impacto_val"
+hist(predv$pred_test)
+
+```
+
+CATE training
+
+```{r}
+summary(pred$Impacto)
+
+```
+
+CATE validación
+
+```{r}
+summary(predv$Impacto_val)
+
+```
 
 
 
