@@ -568,10 +568,30 @@ summary(predv$Impacto_val)
 
 11 (2pts). Ahora vayamos al causal forest. Estima un causal forest en la base de entrenamiento (Estima 750 árboles)
 ```{r cache=TRUE}
-wcf <- as.matrix(crm_train$mailing_indicator)
-xcf <- model.matrix(lm(outcome_spend ~ ., data = crm_train))
-ycf <- as.matrix(crm_train$outcome_spend)
-cf <- causal_forest(xcf,ycf,wcf, num.trees= 750)
+crm_train <- subset(crm, training_sample==1)
+X<-
+  crm_train %>% 
+  ungroup() %>%
+  select(-customer_id,-mailing_indicator,-outcome_spend)
+X<-sparse.model.matrix(~.+0, data = X)
+Y<-crm_train$outcome_spend
+W<-crm_train$mailing_indicator
+
+library(parallel)
+
+
+detectCores()
+cl<-makeCluster(8)
+inicio<-Sys.time()
+
+#Estimamos causal forest
+cf<-causal_forest(X,Y,W, num.trees = 750)
+(tiempo<-Sys.time()-inicio)
+
+stopCluster(cl)
+
+
+)
 
 ```
 12 (3pts). Cómo se distribuye el impacto de tratamiento? Cuál es el impacto de tratamiento (ATE)? Qué tanto se acerca al impacto de tratamiento "real"? Cómo se compara con el impacto estimado con el ddml simple?
