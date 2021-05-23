@@ -440,7 +440,7 @@ Solo el intercepto sale relevante para g(x), mientras que para m(x) hay 39 varia
 wcf <- as.matrix(crm_train$mailing_indicator)
 xcf <- model.matrix(lm(outcome_spend ~ ., data = crm_train))
 ycf <- as.matrix(crm_train$outcome_spend)
-cf <- causal_forest(xcf,ycf,wcf)
+cf <- causal_forest(xcf,ycf,wcf, num.trees= 750)
 
 ```
 12 (3pts). Cómo se distribuye el impacto de tratamiento? Cuál es el impacto de tratamiento (ATE)? Qué tanto se acerca al impacto de tratamiento "real"? Cómo se compara con el impacto estimado con el ddml simple?
