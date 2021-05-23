@@ -266,18 +266,19 @@ crm_test  <- subset(crm, training_sample==0)
 
 
 
+
 ```{r}
 #Preparamos las variables :
 # Matriz de covariates
 crm_train$treat<-NULL
 X<-
-  crm_train%>% 
+  crm_train %>% 
   ungroup() %>%
   select(-customer_id,-mailing_indicator)
 X<-sparse.model.matrix(~.+0, data = X)
-
+dim(X)
 trat<-crm_train$mailing_indicator
-outcome<-crm_taing$outcome_spend
+outcome<-crm_train$outcome_spend
 
 crm_train <-
   crm_train%>%
@@ -288,12 +289,13 @@ k<-treatment_assign(data = crm_train,
                     strata_varlist = "customer_id",
                     missfits = "global",seed = 1900, 
                     key = "customer_id")$data
+View(k)
+b<-k$treat
 k<-
   k%>%
   mutate(k = treat+1)%>%
   ungroup()
-
-base_training<-bind_cols(crm_train, k%>% select(k))
+crm_train<-bind_cols(crm_train, k%>% select(k))
 k<-k$k
 
 
@@ -318,16 +320,16 @@ modelo<-map_dfr(1:5,
   resid_monto <- outcome[k==a]-monto_hat
   
   fits<-bind_cols("treat_hat" = treat_hat,
-                  "monto_hat"= monto_hat,
+                  "spend_hat"= monto_hat,
                   "resid_treat" = treat_resid,
-                  "resid_monto" = resid_monto)
+                  "resid_spend" = resid_monto)
   
   })
 
 View(modelo)
-monto_ret_ate<-lm(resid_monto~resid_treat,
-                  data = modelo) %>%
-  tidy()
+
+
+```
 
 ```
 
