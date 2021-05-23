@@ -269,6 +269,11 @@ crm_test  <- subset(crm, training_sample==0)
 
 ```{r}
 #Preparamos las variables :
+
+crm_train <-
+  crm_train%>%
+  arrange(customer_id)
+
 # Matriz de covariates
 crm_train$training_sample<-NULL
 X<-
@@ -279,10 +284,6 @@ X<-sparse.model.matrix(~.+0, data = X)
 dim(X)
 trat<-crm_train$mailing_indicator
 outcome<-crm_train$outcome_spend
-
-crm_train <-
-  crm_train%>%
-  arrange(customer_id)
 
 k<-treatment_assign(data = crm_train, 
                     share_control = 0.2,n_t = 4,  
