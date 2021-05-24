@@ -607,7 +607,10 @@ ATE=2.7610950
 13. Haz un scatter plot de las predicciones de ambos modelos? Hay alguna relación?
 ```{r}
 # Forest
-effects <- predict(cf)$predictions
+cf_pred<-cf$predictions
+
+
+plot(cf_pred, main="Predicción Causal Forest", xlab="")
 
 # DD LASSO
 
