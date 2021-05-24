@@ -709,6 +709,8 @@ ac10<-ate10_c$coefficients[2]
 (prom_ate_cf<-(ac1+ac2+ac3+ac4+ac5+ac6+ac7+ac8+ac9+ac10)/10)
 
 
+table(prom_ate_cf,prom_ate_lasso)
+
 ```
 
 
