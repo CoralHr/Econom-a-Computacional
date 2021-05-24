@@ -622,6 +622,95 @@ plot(predv$Impacto_val,main="Predicción lasso",xlab="")
 
 14 (4pts). Evalúa el poder predictivo de cada modelo (OOS). Esto se hace por modelo: Divide la muestra en 10 partes con base en el score de ddml. Para cada parte, estima el impacto de tratamiento vía una regresión y saca el promedio del score. Valida si para los grupos que dice el score el impacto será más grande, el coeficiente de la regresión es. Cómo se ven los modelos? Cuál parece ser mejor?
 
+```{r}
+#Dividimos la muestra en deciles partes con base al score de ddml
+
+library(gtools)
+d <- quantcut(modelo$spend_hat, c(0,.1,.2,.3,.4,.5,.6,.7,.8,.9, 1))
+crm_lasso<-split(modelo, d)
+p1<-crm_lasso$`[-22.2,-0.00286]`
+p2<-crm_lasso$`(-0.00286,0.854]`
+p3<-crm_lasso$`(0.854,1.6]`
+p4<-crm_lasso$`(1.6,2.54]`
+p5<-crm_lasso$`(2.54,3.73]`
+p6<-crm_lasso$`(3.73,5.35]`
+p7<-crm_lasso$`(5.35,7.7]`
+p8<-crm_lasso$`(7.7,11.5]`
+p9<-crm_lasso$`(11.5,19.7]`
+p10<-crm_lasso$`(19.7,832]`
+
+ate1_lasso<-lm(resid_spend~resid_treat, data=p1)
+a1<-ate1_lasso$coefficients[2]
+ate2_lasso<-lm(resid_spend~resid_treat, data=p2)
+a2<-ate2_lasso$coefficients[2]
+ate3_lasso<-lm(resid_spend~resid_treat, data=p3)
+a3<-ate3_lasso$coefficients[2]
+ate4_lasso<-lm(resid_spend~resid_treat, data=p4)
+a4<-ate4_lasso$coefficients[2]
+ate5_lasso<-lm(resid_spend~resid_treat, data=p5)
+a5<-ate5_lasso$coefficients[2]
+ate6_lasso<-lm(resid_spend~resid_treat, data=p6)
+a6<-ate6_lasso$coefficients[2]
+ate7_lasso<-lm(resid_spend~resid_treat, data=p7)
+a7<-ate7_lasso$coefficients[2]
+ate8_lasso<-lm(resid_spend~resid_treat, data=p8)
+a8<-ate8_lasso$coefficients[2]
+ate9_lasso<-lm(resid_spend~resid_treat, data=p9)
+a9<-ate9_lasso$coefficients[2]
+ate10_lasso<-lm(resid_spend~resid_treat, data=p10)
+a10<-ate10_lasso$coefficients[2]
+  
+(prom_ate_lasso<-(a1+a2+a3+a4+a5+a6+a7+a8+a9+a10)/10)
+
+#Causal Forest 
+
+crm_cf<-data.frame(
+  "resid_spend" = cf$Y.orig-cf$Y.hat, 
+  "resid_treat" = cf$W.orig-cf$W.hat,
+  "spend_hat" = cf$Y.hat)
+
+
+c <- quantcut(crm_cf$spend_hat, c(0,.1,.2,.3,.4,.5,.6,.7,.8,.9, 1))
+crm_cfo<-split(crm_cf, c)
+
+
+c1<-crm_cfo$`[0.645,1.39]`
+c2<-crm_cfo$`(1.39,1.86]`
+c3<-crm_cfo$`(1.86,2.43]`
+c4<-crm_cfo$`(2.43,3.17]`
+c5<-crm_cfo$`(3.17,4.12]`
+c6<-crm_cfo$`(4.12,5.42]`
+c7<-crm_cfo$`(5.42,7.31]`
+c8<-crm_cfo$`(7.31,10.5]`
+c9<-crm_cfo$`(10.5,17.5]`
+c10<-crm_cfo$`(17.5,328]`
+
+ate1_c<-lm(resid_spend~resid_treat, data=c1)
+ac1<-ate1_c$coefficients[2]
+ate2_c<-lm(resid_spend~resid_treat, data=c2)
+ac2<-ate2_c$coefficients[2]
+ate3_c<-lm(resid_spend~resid_treat, data=c3)
+ac3<-ate3_c$coefficients[2]
+ate4_c<-lm(resid_spend~resid_treat, data=c4)
+ac4<-ate4_c$coefficients[2]
+ate5_c<-lm(resid_spend~resid_treat, data=c5)
+ac5<-ate5_c$coefficients[2]
+ate6_c<-lm(resid_spend~resid_treat, data=c6)
+ac6<-ate6_c$coefficients[2]
+ate7_c<-lm(resid_spend~resid_treat, data=c7)
+ac7<-ate7_c$coefficients[2]
+ate8_c<-lm(resid_spend~resid_treat, data=c8)
+ac8<-ate8_c$coefficients[2]
+ate9_c<-lm(resid_spend~resid_treat, data=c9)
+ac9<-ate9_c$coefficients[2]
+ate10_c<-lm(resid_spend~resid_treat, data=c10)
+ac10<-ate10_c$coefficients[2]
+  
+(prom_ate_cf<-(ac1+ac2+ac3+ac4+ac5+ac6+ac7+ac8+ac9+ac10)/10)
+
+
+```
+
 
 15 (6 pts). Construye una estrategia de focalización a nivel usuario con base a los resultados de cada modelo. Considera lo siguiente: 
 
