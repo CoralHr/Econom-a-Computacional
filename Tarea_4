@@ -611,7 +611,9 @@ cf_pred<-cf$predictions
 
 
 plot(cf_pred, main="Predicción Causal Forest", xlab="")
+```
 
+```{r}
 # DD LASSO
 
 plot(predv$Impacto_val,main="Predicción lasso validación",xlab="")
