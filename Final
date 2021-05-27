@@ -1,1 +1,20 @@
 ###EL IMPACTO DE PROSPERA###
+
+
+#Base de datos
+
+setwd("C:/Users/Samuelk/Documents/ITAM/Econo Comp/Nueva carpeta/Database")
+
+#Cargamos las bases originales
+hog <- as.data.frame(read.csv("hogares.csv"))
+ing <- as.data.frame(read.csv("ingreso.csv"))
+pob <- as.data.frame(read.csv("poblacion.csv"))
+trab <- as.data.frame(read.csv("trabajos.csv"))
+
+#Identificamos los hogares que tienen ingresos por prospera 
+pros <- subset(ing, clave = "P042", select = c(folioviv, foliohog, numren))
+pros$prospera <- 1
+pros <- pros[!duplicated(pros), ]
+
+#Merge
+m1 <- merge(pros, pob, by=c("folioviv","foliohog","numren"), all = TRUE)
