@@ -47,6 +47,10 @@ m4$prospera[is.na(m3$prospera)] <- 0
 save(m4, file = "database.RData")
 
 
+
+##### LIMPIEZA DE DATOS ####
+
+#### NA'S ######
 tabla1<-apply(is.na(m4), 2, mean)
 library(kableExtra)
 library(knitr)
