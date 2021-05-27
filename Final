@@ -45,3 +45,22 @@ m4$prospera[is.na(m3$prospera)] <- 0
 
 #Guardamos la base
 save(m4, file = "database.RData")
+
+
+tabla1<-apply(is.na(m4), 2, mean)
+library(kableExtra)
+library(knitr)
+kbl(tabla1, booktabs = T, caption = "<center><strong>Missing Values de las variables</strong></center>") %>%
+  kable_classic_2(full_width = F, html_font = "Cambria", fixed_thead = T)
+
+#Nos quedamos con las variables que tienen missing values 
+#mayores al 40% para decidir que hacer con ellas. 
+(variables_na40<-ifelse(tabla1>.40,1,0))
+(var_na_40<-sum(variables_na40))
+
+#De las variables disponibles 181, 132 tienen por lo menos 
+#40% de sus obs NA's 
+
+#Para el 95% 
+(variables_na95<-ifelse(tabla1 >0.95,1,0))
+(var_na_95<-sum(variables_na95))
