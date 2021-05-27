@@ -10,11 +10,38 @@ hog <- as.data.frame(read.csv("hogares.csv"))
 ing <- as.data.frame(read.csv("ingreso.csv"))
 pob <- as.data.frame(read.csv("poblacion.csv"))
 trab <- as.data.frame(read.csv("trabajos.csv"))
+viv <- as.data.frame(read.csv("viviendas.csv"))
 
 #Identificamos los hogares que tienen ingresos por prospera 
 pros <- subset(ing, clave = "P042", select = c(folioviv, foliohog, numren))
 pros$prospera <- 1
 pros <- pros[!duplicated(pros), ]
 
-#Merge
+#Merge 1
 m1 <- merge(pros, pob, by=c("folioviv","foliohog","numren"), all = TRUE)
+
+#Identificamos los empleados informales 
+trabinf <- subset(trab, medtrab_7 == 7, select = c(folioviv, foliohog, numren))
+trabinf$trabinf <- 1
+trabinf <- trabinf[!duplicated(trabinf), ]
+
+#merge 2
+m2 <- merge(trabinf,m1, by=c("folioviv","foliohog","numren"), all = TRUE)
+
+#identificamos hogares que se preocuparon por comer
+alim <- subset(hog, acc_alim1 == 1, select = c(folioviv, foliohog,acc_alim1))
+alim <- alim[!duplicated(alim), ]
+
+#merge 3
+m3 <- merge(alim,m2,by=c("folioviv","foliohog"), all = TRUE)
+
+#mrge 4
+m4 <- merge(m3,viv,by=c("folioviv"), all = TRUE)
+
+#llenamos los nas con 0s
+m4$acc_alim1[is.na(m3$acc_alim1)] <- 0
+m4$trabinf[is.na(m3$trabinf)] <- 0
+m4$prospera[is.na(m3$prospera)] <- 0
+
+#Guardamos la base
+save(m4, file = "database.RData")
