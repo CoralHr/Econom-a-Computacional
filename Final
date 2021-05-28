@@ -149,6 +149,35 @@ m4$servmed_11[is.na(m4$servmed_11)] <- 0
 
 m4<-select(m4,-segsoc)
 
+##Transformación
+m4$telefono=ifelse(m4$telefono==1,1,0)
+m4$celular=ifelse(m4$celular==1,1,0)
+m4$tv_paga=ifelse(m4$tv_paga==1,1,0)
+m4$conex_inte=ifelse(m4$conex_inte==1,1,0)
+m4$sexo=ifelse(m4$sexo==1,1,0)
+m4$madre_hog=ifelse(m4$madre_hog==1,1,0)
+m4$padre_hog=ifelse(m4$padre_hog==1,1,0)
+m4$hablaind=ifelse(m4$hablaind==1,1,0)
+m4$alfabetism=ifelse(m4$alfabetism==1,1,0)
+m4$segpob=ifelse(m4$segpob==1,1,0)
+m4$atemed=ifelse(m4$atemed==1,1,0)
+m4$cocina=ifelse(m4$cocina==1,1,0)
+m4$excusado=ifelse(m4$excusado==1,1,0)
+m4$lavadero=ifelse(m4$lavadero==1,1,0)
+m4$fregadero=ifelse(m4$fregadero==1,1,0)
+m4$regadera=ifelse(m4$regadera==1,1,0)
+m4$tinaco_azo=ifelse(m4$tinaco_azo==1,1,0)
+m4$cisterna=ifelse(m4$cisterna==1,1,0)
+m4$pileta=ifelse(m4$pileta==1,1,0)
+m4$calent_sol=ifelse(m4$calent_sol==1,1,0)
+m4$calent_gas=ifelse(m4$calent_gas==1,1,0)
+m4$medidor_luz=ifelse(m4$medidor_luz==1,1,0)
+m4$bomba_agua=ifelse(m4$bomba_agua==1,1,0)
+m4$tanque_gas=ifelse(m4$tanque_gas==1,1,0)
+m4$aire_acond=ifelse(m4$aire_acond==1,1,0)
+m4$calefacc=ifelse(m4$calefacc==1)
+
+
 
 mssng <- as.data.frame(sapply(m4, function(x) sum(is.na(x))))
 colnames(mssng) <- c("MV")
