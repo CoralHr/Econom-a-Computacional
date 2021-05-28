@@ -156,4 +156,18 @@ mssng
 
 save(m4, file = "basebonita.RData")
 
+##CORRELACIÓN #### 
+
+correlaciones<-cor( m4 %>% select(-foliohog,-folioviv,-numren,-tipo_finan,
+                                  -combustible, -mat_pisos, -tipo_viv))
+
+
+ordenado<-as.data.frame(as.table(correlaciones))
+ordenado<-subset(ordenado,abs(Freq)>0.95)
+ordenado<-subset(ordenado,Var1!=Var2)
+colnames(ordenado) <- c("Var1","Var2","corr")
+
+kbl(ordenado, booktabs = T, caption = "<center><strong>Pares con correlación>95%</strong></center>") %>% kable_classic_2(full_width = F, html_font = "Cambria", fixed_thead = T)
+
+m4<-select(m4,-est_dis, -upm, -ubica_geo)
 
