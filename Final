@@ -13,7 +13,7 @@ trab <- as.data.frame(read.csv("trabajos.csv"))
 viv <- as.data.frame(read.csv("viviendas.csv"))
 
 #Identificamos los hogares que tienen ingresos por prospera 
-pros <- subset(ing, clave = "P042", select = c(folioviv, foliohog, numren))
+pros <- subset(ing, clave == "P042", select = c(folioviv, foliohog, numren))
 pros$prospera <- 1
 pros <- pros[!duplicated(pros), ]
 
