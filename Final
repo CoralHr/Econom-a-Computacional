@@ -182,6 +182,12 @@ desbalance<-subset(tabla,p_value1>0.05)
 kbl(tabla, booktabs = T, caption = "<center><strong>Variables desbalanceadas</strong></center>") %>% kable_classic_2(full_width = F, html_font = "Cambria", fixed_thead = T)
 kbl(desbalance, booktabs = T, caption = "<center><strong>Variables desbalanceadas</strong></center>") %>% kable_classic_2(full_width = F, html_font = "Cambria", fixed_thead = T)
 
+####PRUEBA F #######
 
+regress <- balance_regression(select(m4,-foliohog,-folioviv,-numren,-tipo_finan,
+                                     -combustible, -mat_pisos, -tipo_viv), treatment="prospera")
+efe<-regress$F_test
+
+kbl(efe, booktabs = T, caption = "<center><strong>Prueba F</strong></center>") %>% kable_classic_2(full_width = F, html_font = "Cambria", fixed_thead = T)
 
 
