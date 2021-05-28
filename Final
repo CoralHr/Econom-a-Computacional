@@ -87,3 +87,6 @@ m4$hablaind<-ifelse(m4$hablaind==1,1,0)
 
 m4$hablaind
 
+mssng <- as.data.frame(sapply(m4, function(x) sum(is.na(x))))
+colnames(mssng) <- c("MV")
+mssng
