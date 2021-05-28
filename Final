@@ -50,12 +50,9 @@ save(m4, file = "database.RData")
 
 ##### LIMPIEZA DE DATOS ####
 ###Quitamos las variables subindentificadoras que no
-#utilizaremos para el análisis. 
-library(dbplyr)
 library(tidyverse)
 m4<- select(m4,- num_dueno1,- num_dueno1, - hog_dueno2,- conyuge_id,
             - padre_id,- madre_id, -lenguaind)
-summary(m4)
 
 #Discapacidad
 #Para esta variable decidimos dejar solo una dummy que indica
@@ -69,21 +66,24 @@ m4<-select(m4, - disc1, -disc2, - disc3, -disc4,
            -disc5, -disc6, -disc7, -causa1, -causa2,
            -causa3,-causa4,-causa5,-causa6,-causa7)
 
-#### NA'S ######
-tabla1<-apply(is.na(m4), 2, mean)
-library(kableExtra)
-library(knitr)
-kbl(tabla1, booktabs = T, caption = "<center><strong>Missing Values de las variables</strong></center>") %>%
-  kable_classic_2(full_width = F, html_font = "Cambria", fixed_thead = T)
 
-#Nos quedamos con las variables que tienen missing values 
-#mayores al 40% para decidir que hacer con ellas. 
-(variables_na40<-ifelse(tabla1>.40,1,0))
-(var_na_40<-sum(variables_na40))
+m4<-select(m4, -redsoc_1,-redsoc_2,-redsoc_3,-redsoc_4,-redsoc_5,-redsoc_6,-usotiempo2,-usotiempo3,-usotiempo3,-usotiempo4,-usotiempo5,-usotiempo6,-usotiempo7,-usotiempo8,
+           -inst_1,-inst_2,-inst_3,-inst_4,-inst_5,-inst_6, -min_1,-min_2,-min_3,-min_4,-min_5,-min_6,-min_7,-min_8)
 
-#De las variables disponibles 181, 132 tienen por lo menos 
-#40% de sus obs NA's 
+m4<-select(m4, -inscr_1,-inscr_2,-inscr_3,-inscr_4,-inscr_5,-inscr_6,-inscr_7,-inscr_8,-prob_anio,-prob_mes,-razon_1,-razon_2,-razon_3,-razon_4,-razon_5,-razon_6,-razon_7,
+           -razon_8,-razon_9,-razon_10,-razon_11
+           )
 
-#Para el 95% 
-(variables_na95<-ifelse(tabla1 >0.95,1,0))
-(var_na_95<-sum(variables_na95))
+m4<-select(m4, -num_dueno2,-escrituras,-viv_usada,-tipo_adqui,-pago_viv,-estim_pago, -estufa_chi, -cocina_dor, -antigua_ne, -antiguedad,-num_trabaj,-act_pnea2,-motivo_aus,
+           -trabajo_mp,-hijos_sob,-hijos_mue,-hijos_viv,-pres_alta,-diabetes,-peso, -noatenc_1,-noatenc_2,-noatenc_3,-noatenc_4,-noatenc_5,-noatenc_6,-noatenc_7,-noatenc_8,
+           -noatenc_9,-noatenc_10,-noatenc_11,-noatenc_12,-noatenc_13,-noatenc_14,-noatenc_15,-noatenc_16,-hh_lug,-mm_lug,-hh_esp,-mm_esp,-prob_sal,-aten_sal,-usotiempo1,
+           -ss_aa, -ss_mm,-pareja_hog,-edo_conyug,-residencia,-antec_esc,-forma_c,-otorg_c,-forma_b,-nivel,-grado, -comprenind)
+           
+m4<-select(m4, -hablaesp)
+
+m4$hablaind[is.na(m4$hablaind)] <- 0
+m4$hablaind<-ifelse(m4$hablaind==1,1,0)
+
+
+m4$hablaind
+
