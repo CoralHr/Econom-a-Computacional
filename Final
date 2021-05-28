@@ -191,3 +191,12 @@ efe<-regress$F_test
 kbl(efe, booktabs = T, caption = "<center><strong>Prueba F</strong></center>") %>% kable_classic_2(full_width = F, html_font = "Cambria", fixed_thead = T)
 
 
+
+#Dividimos y separamos la base:
+set.seed(1990)
+m4<-
+  m4 %>% 
+  mutate(training_sample = rbinom(n = nrow(m4), 1, 0.7))
+
+m4_train <- subset(m4, training_sample==1)
+m4_test  <- subset(m4, training_sample==0)
