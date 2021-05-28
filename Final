@@ -39,9 +39,9 @@ m3 <- merge(alim,m2,by=c("folioviv","foliohog"), all = TRUE)
 m4 <- merge(m3,viv,by=c("folioviv"), all = TRUE)
 
 #llenamos los nas con 0s
-m4$acc_alim1[is.na(m3$acc_alim1)] <- 0
-m4$trabinf[is.na(m3$trabinf)] <- 0
-m4$prospera[is.na(m3$prospera)] <- 0
+m4$trabinf[is.na(m4$trabinf)] <- 0
+m4$prospera[is.na(m4$prospera)] <- 0
+m4$acc_alim1=ifelse(m4$acc_alim1==1,1,0)
 
 #Guardamos la base
 save(m4, file = "database.RData")
