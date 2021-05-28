@@ -219,8 +219,9 @@ acc_al<-m4_train$acc_alim1
 informal<-m4_train$trabinf
 
 # Creamos la k aleatoriamente
-k<-treatment_assign(data = crm_train, 
+library(RCT)
+k<-treatment_assign(data = m4_train, 
                     share_control = 0.2,n_t = 4,  
-                    strata_varlist = "customer_id",
+                    strata_varlist = "id_indiv",
                     missfits = "global",seed = 1900, 
-                    key = "customer_id")$data
+                    key = "id_indiv")$data
