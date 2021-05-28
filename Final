@@ -190,13 +190,22 @@ efe<-regress$F_test
 
 kbl(efe, booktabs = T, caption = "<center><strong>Prueba F</strong></center>") %>% kable_classic_2(full_width = F, html_font = "Cambria", fixed_thead = T)
 
-
-
-#Dividimos y separamos la base:
+## Aleatorio
 set.seed(1990)
 m4<-
   m4 %>% 
   mutate(training_sample = rbinom(n = nrow(m4), 1, 0.7))
+  
+# Generamos id único por individuo
+m4id<-unite(m4, "id_indiv", c("folioviv","foliohog","numren"))
+m4id<-select(m4id, -folioviv,-foliohog,-numren)
 
-m4_train <- subset(m4, training_sample==1)
-m4_test  <- subset(m4, training_sample==0)
+# Dividimos la base
+m4_train <- subset(m4id, training_sample==1)
+m4_test  <- subset(m4id, training_sample==0)
+
+# Matriz de covariates
+
+m4_train$training_sample<-NULL
+
+m4_train<-m4_train%>%arrange(id_indiv)
