@@ -169,5 +169,19 @@ colnames(ordenado) <- c("Var1","Var2","corr")
 
 kbl(ordenado, booktabs = T, caption = "<center><strong>Pares con correlación>95%</strong></center>") %>% kable_classic_2(full_width = F, html_font = "Cambria", fixed_thead = T)
 
+
 m4<-select(m4,-est_dis, -upm, -ubica_geo)
+
+
+
+### REVISAR laas variables DESBALANCEADAS #####
+tabla <- balance_table(select(m4,-foliohog,-folioviv,-numren,-tipo_finan,
+                              -combustible, -mat_pisos, -tipo_viv), treatment="prospera")
+desbalance<-subset(tabla,p_value1>0.05)
+
+kbl(tabla, booktabs = T, caption = "<center><strong>Variables desbalanceadas</strong></center>") %>% kable_classic_2(full_width = F, html_font = "Cambria", fixed_thead = T)
+kbl(desbalance, booktabs = T, caption = "<center><strong>Variables desbalanceadas</strong></center>") %>% kable_classic_2(full_width = F, html_font = "Cambria", fixed_thead = T)
+
+
+
 
