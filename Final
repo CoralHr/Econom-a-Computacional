@@ -72,21 +72,88 @@ m4<-select(m4, -redsoc_1,-redsoc_2,-redsoc_3,-redsoc_4,-redsoc_5,-redsoc_6,-usot
 
 m4<-select(m4, -inscr_1,-inscr_2,-inscr_3,-inscr_4,-inscr_5,-inscr_6,-inscr_7,-inscr_8,-prob_anio,-prob_mes,-razon_1,-razon_2,-razon_3,-razon_4,-razon_5,-razon_6,-razon_7,
            -razon_8,-razon_9,-razon_10,-razon_11
-           )
+)
 
 m4<-select(m4, -num_dueno2,-escrituras,-viv_usada,-tipo_adqui,-pago_viv,-estim_pago, -estufa_chi, -cocina_dor, -antigua_ne, -antiguedad,-num_trabaj,-act_pnea2,-motivo_aus,
            -trabajo_mp,-hijos_sob,-hijos_mue,-hijos_viv,-pres_alta,-diabetes,-peso, -noatenc_1,-noatenc_2,-noatenc_3,-noatenc_4,-noatenc_5,-noatenc_6,-noatenc_7,-noatenc_8,
            -noatenc_9,-noatenc_10,-noatenc_11,-noatenc_12,-noatenc_13,-noatenc_14,-noatenc_15,-noatenc_16,-hh_lug,-mm_lug,-hh_esp,-mm_esp,-prob_sal,-aten_sal,-usotiempo1,
            -ss_aa, -ss_mm,-pareja_hog,-edo_conyug,-residencia,-antec_esc,-forma_c,-otorg_c,-forma_b,-nivel,-grado, -comprenind)
-           
+
 m4<-select(m4, -hablaesp)
 
-m4$hablaind[is.na(m4$hablaind)] <- 0
-m4$hablaind<-ifelse(m4$hablaind==1,1,0)
+m4 <- m4 %>% 
+  mutate(
+    secundaria = case_when( 
+      nivelaprob == 3 &  gradoaprob >2 ~ 1,
+      nivelaprob > 3 ~ 1,
+      nivelaprob == 3 &  gradoaprob <3 ~ 0,
+      nivelaprob < 3 ~ 0,
+    )
+  )
 
 
-m4$hablaind
+m4<-select(m4, -nivelaprob,-gradoaprob)
 
 mssng <- as.data.frame(sapply(m4, function(x) sum(is.na(x))))
 colnames(mssng) <- c("MV")
 mssng
+
+m4<-select(m4,-hor_3,-hor_5)
+
+m4$hor_1[is.na(m4$hor_1)] <- 0
+m4$hor_2[is.na(m4$hor_2)] <- 0
+m4$hor_4[is.na(m4$hor_4)] <- 0
+m4$hor_6[is.na(m4$hor_6)] <- 0
+m4$hor_7[is.na(m4$hor_7)] <- 0
+m4$hor_8[is.na(m4$hor_8)] <- 0
+m4$renta[is.na(m4$renta)] <- 0
+m4$segvol_1[is.na(m4$segvol_1)] <- 0
+m4$segvol_2[is.na(m4$segvol_2)] <- 0
+m4$segvol_3[is.na(m4$segvol_3)] <- 0
+m4$segvol_4[is.na(m4$segvol_4)] <- 0
+m4$segvol_5[is.na(m4$segvol_5)] <- 0
+m4$segvol_6[is.na(m4$segvol_6)] <- 0
+m4$segvol_7[is.na(m4$segvol_7)] <- 0
+
+m4$norecib_1[is.na(m4$norecib_1)] <- 0
+m4$norecib_2[is.na(m4$norecib_2)] <- 0
+m4$norecib_3[is.na(m4$norecib_3)] <- 0
+m4$norecib_4[is.na(m4$norecib_4)] <- 0
+m4$norecib_5[is.na(m4$norecib_5)] <- 0
+m4$norecib_6[is.na(m4$norecib_6)] <- 0
+m4$norecib_7[is.na(m4$norecib_7)] <- 0
+m4$norecib_8[is.na(m4$norecib_8)] <- 0
+m4$norecib_9[is.na(m4$norecib_9)] <- 0
+m4$norecib_10[is.na(m4$norecib_10)] <- 0
+m4$norecib_11[is.na(m4$norecib_11)] <- 0
+
+m4$pagoaten_1[is.na(m4$pagoaten_1)] <- 0
+m4$pagoaten_2[is.na(m4$pagoaten_2)] <- 0
+m4$pagoaten_3[is.na(m4$pagoaten_3)] <- 0
+m4$pagoaten_4[is.na(m4$pagoaten_4)] <- 0
+m4$pagoaten_5[is.na(m4$pagoaten_5)] <- 0
+m4$pagoaten_6[is.na(m4$pagoaten_6)] <- 0
+m4$pagoaten_7[is.na(m4$pagoaten_7)] <- 0
+
+m4$servmed_1[is.na(m4$servmed_1)] <- 0
+m4$servmed_2[is.na(m4$servmed_2)] <- 0
+m4$servmed_3[is.na(m4$servmed_3)] <- 0
+m4$servmed_4[is.na(m4$servmed_4)] <- 0
+m4$servmed_5[is.na(m4$servmed_5)] <- 0
+m4$servmed_6[is.na(m4$servmed_6)] <- 0
+m4$servmed_7[is.na(m4$servmed_7)] <- 0
+m4$servmed_8[is.na(m4$servmed_8)] <- 0
+m4$servmed_9[is.na(m4$servmed_9)] <- 0
+m4$servmed_10[is.na(m4$servmed_10)] <- 0
+m4$servmed_11[is.na(m4$servmed_11)] <- 0
+
+m4<-select(m4,-segsoc)
+
+
+mssng <- as.data.frame(sapply(m4, function(x) sum(is.na(x))))
+colnames(mssng) <- c("MV")
+mssng
+
+save(m4, file = "basebonita.RData")
+
+
