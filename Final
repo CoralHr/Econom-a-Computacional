@@ -190,33 +190,58 @@ efe<-regress$F_test
 
 kbl(efe, booktabs = T, caption = "<center><strong>Prueba F</strong></center>") %>% kable_classic_2(full_width = F, html_font = "Cambria", fixed_thead = T)
 
-## Aleatorio
+
+
+#########Nuevos ajustes a la base##########
+m4<-select(m4,-etnia,-asis_esc,-tipoesc,-tiene_b,-otorg_b,-tiene_c,-act_pnea1,-dotac_agua,-pago_mesp,-hog_dueno1)
+m4<-select(m4,-uso_compar,-sanit_agua,-biodigest,-bano_comp,-bano_excus,-bano_regad)
+m4<-m4[complete.cases(m4), ]
+
+
+save(m4, file = "basebonita.RData")
+
+
+correlaciones<-cor( m4 %>% select(-foliohog,-folioviv,-numren,-tipo_finan,
+                                  -combustible, -mat_pisos, -tipo_viv))
+
+
+ordenado<-as.data.frame(as.table(correlaciones))
+ordenado<-subset(ordenado,abs(Freq)>0.95)
+ordenado<-subset(ordenado,Var1!=Var2)
+colnames(ordenado) <- c("Var1","Var2","corr")
+
+kbl(ordenado, booktabs = T, caption = "<center><strong>Pares con correlación>95%</strong></center>") %>% kable_classic_2(full_width = F, html_font = "Cambria", fixed_thead = T)
+
+m4<-select(m4,-est_dis, -upm, -ubica_geo)
+
+
 set.seed(1990)
 m4<-
   m4 %>% 
   mutate(training_sample = rbinom(n = nrow(m4), 1, 0.7))
-  
-# Generamos id único por individuo
-m4id<-unite(m4, "id_indiv", c("folioviv","foliohog","numren"))
-m4id<-select(m4id, -folioviv,-foliohog,-numren)
 
-# Dividimos la base
-m4_train <- subset(m4id, training_sample==1)
-m4_test  <- subset(m4id, training_sample==0)
+
+# Generamos id único por individuo
+m4<-unite(m4, "id_indiv", c("folioviv","foliohog","numren"))
+
+m4_train <- subset(m4, training_sample==1)
+m4_test  <- subset(m4, training_sample==0)
 
 # Matriz de covariates
 
 m4_train$training_sample<-NULL
 
 m4_train<-m4_train%>%arrange(id_indiv)
-X<-m4_train%>%ungroup()%>%select(-id_indiv,-prospera,-secundaria,-acc_alim1,-trabinf)
-library(gamlr)
-X<-sparse.model.matrix(~.+0, data = X)
 
-prosper<-m4_train$prospera
-sec_term<-m4_train$secundaria
-acc_al<-m4_train$acc_alim1
-informal<-m4_train$trabinf
+XX<-m4_train%>%ungroup()%>%select(-id_indiv,-prospera,-secundaria,-acc_alim1,-trabinf)
+library(gamlr)
+X<-sparse.model.matrix(~.+0, data = XX)
+
+  prosper<-m4_train$prospera
+  sec_term<-m4_train$secundaria
+  acc_al<-m4_train$acc_alim1
+  informal<-m4_train$trabinf
+
 
 # Creamos la k aleatoriamente
 library(RCT)
@@ -225,3 +250,119 @@ k<-treatment_assign(data = m4_train,
                     strata_varlist = "id_indiv",
                     missfits = "global",seed = 1900, 
                     key = "id_indiv")$data
+
+
+k<-  k%>%  mutate(k = treat+1)%>%  ungroup() 
+
+k<-k$k
+
+
+
+#Cross-fitting
+
+
+modelo2<-map_dfr(1:5,
+                 function(a) {
+                   treat_fit <-gamlr(x = X[k!=a, , drop=F],
+                                     y =prosper[k!=a],family="binomial")
+                   treat_hat<-as.numeric(predict(treat_fit,
+                                                 newdata = X[k==a, , drop= F],
+                                                 type = "response"))
+                   treat_resid <- prosper[k==a]-treat_hat
+                   
+                   secundaria_fit <-gamlr(x = X[k!=a, , drop= F],
+                                       y = sec_term[k!=a])
+                   secundaria_hat<-as.numeric(predict(secundaria_fit,
+                                                   newdata = X[k==a, , drop= F],
+                                                   type = "response"))
+                   secundaria_resid <- sec_term[k==a]-secundaria_hat
+                   
+                   informal_fit <-gamlr(x = X[k!=a, , drop= F],
+                                        y = informal[k!=a])
+                   informal_hat<-as.numeric(predict(informal_fit,
+                                                    newdata = X[k==a, , drop= F],
+                                                    type = "response"))
+                   informal_resid <- informal[k==a]-informal_hat
+                   
+                  
+                  acceso_fit <-gamlr(x = X[k!=a, , drop= F],
+                                      y = acc_al[k!=a])
+                   acceso_hat<-as.numeric(predict(acceso_fit,
+                                                  newdata = X[k==a, , drop= F],
+                                                  type = "response"))
+                   acceso_resid <- acc_al[k==a]-acceso_hat
+                   
+                   fits<-bind_cols("treat_hat" = treat_hat,
+                                    "treat_resid" = treat_resid,
+                                   "secundaria_hat"= secundaria_hat,
+                                   "secundaria_resid" = secundaria_resid,
+                                   "informal_hat"= informal_hat,
+                                   "informal_resid" = informal_resid,
+                                   "acceso_hat"= acceso_hat,
+                                   "acceso_resid" = acceso_resid)
+                                   
+                                    })
+
+## ATEs
+library(stargazer)
+ate_acceso<-lm(acceso_resid~treat_resid, data=modelo2) 
+ate_secundaria<-lm(secundaria_resid~treat_resid, data=modelo2) 
+ate_informal<-lm(informal_resid~treat_resid, data=modelo3) 
+stargazer(ate_acceso,ate_secundaria,ate_informal,type="text")
+
+##  DDML Lasso
+## Generamos una matriz X sparse,que incluye resid_treat y las interacciones de x con resid_treat
+
+T_resid<-modelo2$treat_resid
+XX$treat_resid<-with(XX,T_resid)
+
+# Matriz sparse con interacciones
+X1<-sparse.model.matrix(~.+0+treat_resid*., data = XX)
+dim(X1)
+## Generamos Y´s
+Yacceso<-modelo2$acceso_resid
+Ysecundaria<-modelo2$secundaria_resid
+Yinformal<-modelo2$informal_resid
+
+## LASSO 
+hte_acceso<-gamlr(x = X1, y =Yacceso)
+coef_acceso<-as.matrix(coef(hte_acceso))
+coef_acceso<-tibble(variable =rownames(coef_acceso),coeficiente = coef_acceso[,1])
+coef_acceso<-coef_acceso%>% filter(coeficiente!=0)
+kbl(coef_acceso, booktabs = T, caption = "<center><strong>Variables significativas</strong></center>") %>% kable_classic_2(full_width = F, html_font = "Cambria", fixed_thead = T)
+
+
+hte_secundaria<-gamlr(x = X1, y =Ysecundaria)
+coef_secundaria<-as.matrix(coef(hte_secundaria))
+coef_secundaria<-tibble(variable =rownames(coef_secundaria),coeficiente = coef_secundaria[,1])
+coef_secundaria<-coef_secundaria%>% filter(coeficiente!=0)
+kbl(coef_secundaria, booktabs = T, caption = "<center><strong>Variables significativas</strong></center>") %>% kable_classic_2(full_width = F, html_font = "Cambria", fixed_thead = T)
+
+
+
+hte_informal<-gamlr(x = X1, y =Yinformal)
+coef_informal<-as.matrix(coef(hte_informal))
+coef_informal<-tibble(variable =rownames(coef_informal),coeficiente = coef_informal[,1])
+coef_informal<-coef_informal%>% filter(coeficiente!=0)
+kbl(coef_informal, booktabs = T, caption = "<center><strong>Variables significativas</strong></center>") %>% kable_classic_2(full_width = F, html_font = "Cambria", fixed_thead = T)
+
+
+pred_acceso<-as.numeric(predict(hte_acceso, newdata=X1, type="response"))
+pred_acceso<-as.data.frame(pred_acceso)
+colnames(pred_acceso)<-"Impacto_acceso"
+
+pred_secundaria<-as.numeric(predict(hte_secundaria, newdata=X1, type="response"))
+pred_secundaria<-as.data.frame(pred_secundaria)
+colnames(pred_secundaria)<-"Impacto_secundaria"
+
+
+pred_informal<-as.numeric(predict(hte_informal, newdata=X1, type="response"))
+pred_informal<-as.data.frame(pred_informal)
+colnames(pred_informal)<-"Impacto_informal"
+
+id_indiv<-m4_train$id_indiv
+predicciones<-cbind.data.frame(id_indiv,pred_acceso,pred_secundaria,pred_informal)
+
+
+
+
