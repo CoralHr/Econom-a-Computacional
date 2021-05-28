@@ -209,3 +209,11 @@ m4_test  <- subset(m4id, training_sample==0)
 m4_train$training_sample<-NULL
 
 m4_train<-m4_train%>%arrange(id_indiv)
+X<-m4_train%>%ungroup()%>%select(-id_indiv,-prospera,-secundaria,-acc_alim1,-trabinf)
+library(gamlr)
+X<-sparse.model.matrix(~.+0, data = X)
+
+prosper<-m4_train$prospera
+sec_term<-m4_train$secundaria
+acc_al<-m4_train$acc_alim1
+informal<-m4_train$trabinf
