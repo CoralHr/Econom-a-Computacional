@@ -394,4 +394,15 @@ predicciones<-cbind.data.frame(id_indiv,pred_acceso,pred_secundaria,pred_informa
 
 
 
+### Predicciones (una primera aproximación es evaluar quiénes tienen una mejora en los outcomes de interés, equivalente a una disminución de preocupación por comida, una disminución en la informalidad y una mayor probabilidad de terminar la secundaria)
+predicciones$prospera<-m4_train$prospera
+table (m4_train$prospera)
 
+predicciones$acceso<- with(predicciones,ifelse(Impacto_acceso<=0,1,0))
+predicciones$secundaria<- with(predicciones,ifelse(Impacto_secundaria>0,1,0))
+predicciones$informalidad<- with(predicciones,ifelse(Impacto_informal<=0,1,0))
+predicciones$newprospera<- with(predicciones,ifelse(acceso+secundaria+informalidad>=2 & prospera==1,1,0))
+
+table(predicciones$newprospera)
+
+# Se advierte que, si el programa se focaliza a quienes obtuvieron una mejora en los outcomes de interés, se le otorgaría a 36.5% de quienes lo reciben actualmente.
